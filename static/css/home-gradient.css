@@ -1,0 +1,68 @@
+/* Modern Gradient Overrides for Home Page */
+.hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.custom-navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.btn.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+  border-color: transparent !important;
+}
+
+.btn.btn-primary:hover {
+  background: linear-gradient(135deg, #5a6fd8, #6a4190) !important;
+  border-color: transparent !important;
+}
+
+.custom-navbar .custom-navbar-nav li a:before {
+  background: linear-gradient(135deg, #f093fb, #f5576c) !important;
+}
+
+.custom-list li:before {
+  border: 2px solid #667eea !important;
+}
+
+.footer-section .subscription-form h3 {
+  color: #667eea !important;
+}
+
+.footer-section .subscription-form .form-control:active,
+.footer-section .subscription-form .form-control:focus {
+  border-color: #667eea !important;
+}
+
+.footer-section .footer-logo-wrap .footer-logo {
+  color: #667eea !important;
+}
+
+.footer-section .custom-social li a {
+  color: #667eea !important;
+}
+
+.footer-section .custom-social li a:hover {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+}
+
+.testimonial-slider-wrap .tns-nav button:hover:before,
+.testimonial-slider-wrap .tns-nav button.tns-nav-active:before {
+  background-color: #667eea !important;
+}
+
+.testimonial-slider-wrap #testimonial-nav > span:hover {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+}
+
+.text-primary {
+  color: #667eea !important;
+}
+
+.service .service-icon {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+}
+
+.feature .icon:before {
+  background: rgba(102, 126, 234, 0.2) !important;
+}

@@ -1,0 +1,40 @@
+.resume-carousel {
+    height: 400px;
+    overflow: hidden;
+}
+
+.resume-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    height: 100%;
+    margin-top: 30px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.resume-item {
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.resume-item:hover {
+    transform: scale(1.1);
+}
+
+.resume-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: all 0.8s ease;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .resume-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

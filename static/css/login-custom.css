@@ -1,0 +1,35 @@
+/* Video background styles */
+.login__video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+}
+
+/* Ensure video works on all devices */
+@media (max-width: 768px) {
+    .login__video {
+        object-fit: cover;
+    }
+}
+
+/* Fallback for older browsers */
+.login__video::-webkit-media-controls {
+    display: none !important;
+}
+
+.login__video::-webkit-media-controls-panel {
+    display: none !important;
+}
+
+.login__video::-webkit-media-controls-play-button {
+    display: none !important;
+}
+
+.login__video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+}
+
+/* Custom styles for registration form */\n.register__form {\n    max-height: 95vh;\n    overflow-y: auto;\n    padding: 2rem 1.5rem;\n}\n\n.register__content {\n    row-gap: 1rem;\n    margin-bottom: 1rem;\n}\n\n.register__box {\n    margin-bottom: 0.5rem;\n}\n\n/* Smaller form on mobile for registration */\n@media screen and (max-width: 576px) {\n    .register__form {\n        padding: 1.5rem 1rem;\n        margin-inline: 1rem;\n    }\n    \n    .login__title {\n        font-size: 1.5rem;\n        margin-bottom: 1.5rem;\n    }\n    \n    .register__content {\n        row-gap: 0.75rem;\n    }\n    \n    .login__box {\n        padding-bottom: 0.5rem;\n    }\n}\n\n/* Scrollbar styling for registration form */\n.register__form::-webkit-scrollbar {\n    width: 6px;\n}\n\n.register__form::-webkit-scrollbar-track {\n    background: rgba(255, 255, 255, 0.1);\n    border-radius: 3px;\n}\n\n.register__form::-webkit-scrollbar-thumb {\n    background: rgba(255, 255, 255, 0.3);\n    border-radius: 3px;\n}\n\n.register__form::-webkit-scrollbar-thumb:hover {\n    background: rgba(255, 255, 255, 0.5);\n}\n\n/* Error message styling */\n.error-message {\n    background-color: rgba(255, 0, 0, 0.1);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    padding: 1rem;\n    border-radius: 0.5rem;\n    margin-bottom: 1.5rem;\n    text-align: center;\n    max-height: 120px;\n    overflow-y: auto;\n}\n\n.error-text {\n    color: #ff6b6b;\n    font-size: 0.75rem;\n    margin-bottom: 0.25rem;\n}

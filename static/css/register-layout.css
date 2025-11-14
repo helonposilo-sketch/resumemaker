@@ -1,0 +1,23 @@
+.register__form {
+    width: 1200px !important;
+    max-width: 95vw;
+}
+
+.register__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.register__row .full-width {
+    grid-column: 1 / -1;
+}
+
+.register__content {
+    margin-bottom: 1rem;
+}
+
+.register__box {
+    margin-bottom: 0;
+}

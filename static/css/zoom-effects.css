@@ -1,0 +1,13 @@
+.img-wrap img {
+    transition: transform 0.3s ease;
+}
+
+.img-wrap:hover img {
+    transform: scale(1.05);
+}
+
+.img-wrap {
+    overflow: hidden;
+    border-radius: 10px;
+}
+
