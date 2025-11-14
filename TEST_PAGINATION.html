@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Multi-Page Resume Preview</title>
+    <link rel="stylesheet" href="static/css/resume-builder.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+        .test-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 10000;
+        }
+        .test-btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .test-btn:hover {
+            background: #5568d3;
+        }
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-controls">
+        <h3 style="margin-top: 0;">Test Controls</h3>
+        <button class="test-btn" onclick="testUpdatePreview()">Test updatePreview()</button>
+        <button class="test-btn" onclick="testRenderPreview()">Test renderPreview()</button>
+        <button class="test-btn" onclick="testShowPreview()">Test showPreview()</button>
+        <button class="test-btn" onclick="window.print()">Test Print</button>
+        <div id="status" class="status">Ready to test...</div>
+    </div>
+
+    <!-- Hidden form elements for testing -->
+    <div style="display: none;">
+        <input type="text" id="id_full_name" value="John Smith">
+        <input type="email" id="id_email" value="john.smith@email.com">
+        <input type="text" id="id_phone" value="+1 (555) 123-4567">
+        <input type="text" id="id_address" value="New York, NY">
+        <textarea id="id_summary">Experienced software engineer with 5+ years of expertise in full-stack development.</textarea>
+        
+        <!-- Experience fields -->
+        <input type="text" id="exp_position_1" value="Senior Software Engineer">
+        <input type="text" id="exp_company_1" value="Tech Solutions Inc.">
+        <input type="date" id="exp_start_1" value="2020-01-15">
+        <input type="date" id="exp_end_1" value="2024-11-01">
+        <textarea id="exp_desc_1">Led development of scalable web applications using React and Node.js.</textarea>
+        
+        <input type="text" id="exp_position_2" value="Full Stack Developer">
+        <input type="text" id="exp_company_2" value="Digital Innovations LLC">
+        <input type="date" id="exp_start_2" value="2018-06-01">
+        <input type="date" id="exp_end_2" value="2019-12-31">
+        <textarea id="exp_desc_2">Developed responsive web applications and RESTful APIs.</textarea>
+        
+        <!-- Education fields -->
+        <input type="text" id="edu_degree_1" value="Bachelor of Computer Science">
+        <input type="text" id="edu_institution_1" value="University of Technology">
+        <input type="text" id="edu_field_1" value="Computer Science">
+        <input type="date" id="edu_end_1" value="2019-05-15">
+        
+        <!-- Skills fields -->
+        <input type="text" id="skill_name_1" value="JavaScript">
+        <select id="skill_level_1"><option value="Expert" selected>Expert</option></select>
+        
+        <input type="text" id="skill_name_2" value="React">
+        <select id="skill_level_2"><option value="Advanced" selected>Advanced</option></select>
+        
+        <input type="text" id="skill_name_3" value="Node.js">
+        <select id="skill_level_3"><option value="Advanced" selected>Advanced</option></select>
+    </div>
+
+    <!-- Preview elements -->
+    <div style="display: none;">
+        <div id="preview-name"></div>
+        <div id="preview-email"></div>
+        <div id="preview-phone"></div>
+        <div id="preview-address"></div>
+        <div id="summary-section"><div id="preview-summary"></div></div>
+        <div id="experience-section"><div id="preview-experience"></div></div>
+        <div id="education-section"><div id="preview-education"></div></div>
+        <div id="skills-section"><div id="preview-skills"></div></div>
+    </div>
+
+    <script src="static/js/resume-builder.js"></script>
+    <script>
+        // Initialize counters
+        experienceCount = 2;
+        educationCount = 1;
+        skillCount = 3;
+
+        function updateStatus(message, type = 'success') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + type;
+        }
+
+        function testUpdatePreview() {
+            try {
+                updatePreview();
+                updateStatus('✓ updatePreview() executed without errors', 'success');
+                console.log('✓ updatePreview test passed');
+            } catch (error) {
+                updateStatus('✗ updatePreview() failed: ' + error.message, 'error');
+                console.error('✗ updatePreview test failed:', error);
+            }
+        }
+
+        function testRenderPreview() {
+            try {
+                const testData = {
+                    full_name: 'Jane Doe',
+                    email: 'jane@example.com',
+                    phone: '+1 (555) 987-6543',
+                    address: 'San Francisco, CA',
+                    summary: 'Test summary for renderPreview function'
+                };
+                renderPreview(testData);
+                updateStatus('✓ renderPreview() executed successfully', 'success');
+                console.log('✓ renderPreview test passed');
+            } catch (error) {
+                updateStatus('✗ renderPreview() failed: ' + error.message, 'error');
+                console.error('✗ renderPreview test failed:', error);
+            }
+        }
+
+        function testShowPreview() {
+            try {
+                // Set current path to simulate template page
+                showPreview();
+                
+                // Check if modal was created
+                setTimeout(() => {
+                    const modal = document.querySelector('[style*="position: fixed"]');
+                    const pagesContainer = document.getElementById('resume-pages');
+                    const pages = document.querySelectorAll('.resume-page, .page');
+                    
+                    if (modal && pagesContainer) {
+                        updateStatus(`✓ Preview modal created with ${pages.length} page(s)`, 'success');
+                        console.log(`✓ showPreview test passed - ${pages.length} pages generated`);
+                    } else {
+                        updateStatus('✗ Preview modal not created properly', 'error');
+                    }
+                }, 500);
+            } catch (error) {
+                updateStatus('✗ showPreview() failed: ' + error.message, 'error');
+                console.error('✗ showPreview test failed:', error);
+            }
+        }
+
+        // Run initial test on load
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('=== Resume Preview Test Suite ===');
+            console.log('Testing multi-page pagination fix...');
+            
+            // Test 1: updatePreview
+            testUpdatePreview();
+            
+            // Test 2: Check for console errors
+            window.addEventListener('error', function(e) {
+                console.error('✗ Runtime error detected:', e.message);
+                updateStatus('✗ Runtime error: ' + e.message, 'error');
+            });
+            
+            console.log('Tests ready. Use buttons to test each function.');
+        });
+    </script>
+</body>
+</html>

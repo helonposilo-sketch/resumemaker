@@ -1,0 +1,428 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Resume - Professional Builder{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home-gradient.css' %}">
+<style>
+.resume-builder {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 2rem 0;
+}
+.builder-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+.builder-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+.builder-subtitle {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+}
+.templates-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.template-box {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+    position: relative;
+}
+.template-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+.template-box.active {
+    border: 3px solid #667eea;
+    transform: translateY(-10px);
+}
+.template-display {
+    height: 350px;
+    position: relative;
+    overflow: hidden;
+}
+.template-content {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.template-details {
+    padding: 2rem;
+    text-align: center;
+}
+.template-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.8rem;
+}
+.template-summary {
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+.template-tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+.tag {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.choose-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+.choose-btn:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    transform: translateY(-2px);
+}
+.template-box.active .choose-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+.selection-panel {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    text-align: center;
+    margin-top: 3rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    display: none;
+}
+.selection-panel.show {
+    display: block;
+}
+.proceed-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 1.2rem 3rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: inline-block;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+.proceed-btn:hover {
+    background: linear-gradient(135deg, #218838, #1ea085);
+    transform: translateY(-2px);
+    color: white;
+    text-decoration: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="resume-builder">
+    <div class="container">
+        <div class="builder-header">
+            <h1 class="builder-title">Choose Your Resume Template</h1>
+            <p class="builder-subtitle">Select a professional template that best represents your career</p>
+        </div>
+        
+        <div class="templates-container">
+            <div class="template-box" data-template="colored">
+                <div class="template-display" style="background: linear-gradient(135deg, #f5f5dc, #f0f0dc);">
+                    <div class="template-content">
+                        <div style="background: #f5f5dc; padding: 12px; margin: -20px -20px 12px -20px; display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 50px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 7px; color: #666;">IMG</div>
+                            <div>
+                                <div style="font-weight: bold; font-size: 12px;">Maria Garcia</div>
+                                <div style="font-size: 8px; color: #666;">maria@email.com | +1 234 567 8900</div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EXPERIENCE</div>
+                            <div style="font-size: 8px; color: #666; display: flex; justify-content: space-between;">
+                                <span>Marketing Manager</span><span>2021-2024</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">SKILLS</div>
+                            <div style="font-size: 8px; color: #999;">Digital Marketing • Analytics • SEO</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-details">
+                    <h3 class="template-title">Beige Header</h3>
+                    <p class="template-summary">Professional template with warm beige header and photo placement</p>
+                    <div class="template-tags">
+                        <span class="tag">Photo</span>
+                        <span class="tag">Beige</span>
+                    </div>
+                    <button class="choose-btn" onclick="selectTemplate('colored')">Choose Template</button>
+                </div>
+            </div>
+
+            <div class="template-box" data-template="green">
+                <div class="template-display" style="background: linear-gradient(135deg, #e8f5e8, #d4f1d4);">
+                    <div class="template-content">
+                        <div style="background: #e8f5e8; padding: 12px; margin: -20px -20px 12px -20px; border-radius: 8px 8px 0 0;">
+                            <div style="font-weight: bold; font-size: 12px;">Robert Kim</div>
+                            <div style="font-size: 8px; color: #666;">robert@email.com | +1 234 567 8900</div>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EXPERIENCE</div>
+                            <div style="font-size: 8px; color: #666; display: flex; justify-content: space-between;">
+                                <span>Financial Analyst</span><span>2020-2024</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">SKILLS</div>
+                            <div style="font-size: 8px; color: #999;">Excel • Financial Modeling • Analysis</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-details">
+                    <h3 class="template-title">Green Header</h3>
+                    <p class="template-summary">Clean template with light green header for personal information</p>
+                    <div class="template-tags">
+                        <span class="tag">Green</span>
+                        <span class="tag">Clean</span>
+                    </div>
+                    <button class="choose-btn" onclick="selectTemplate('green')">Choose Template</button>
+                </div>
+            </div>
+
+            <div class="template-box" data-template="purple">
+                <div class="template-display" style="background: linear-gradient(135deg, #f3e5f5, #e8d5ea);">
+                    <div class="template-content">
+                        <div style="background: #f3e5f5; padding: 12px; margin: -20px -20px 12px -20px; border-radius: 8px 8px 0 0;">
+                            <div style="font-weight: bold; font-size: 12px;">Emma Thompson</div>
+                            <div style="font-size: 8px; color: #666;">emma@email.com | DOB: 12/05/1992</div>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EXPERIENCE</div>
+                            <div style="font-size: 8px; color: #666; display: flex; justify-content: space-between;">
+                                <span>HR Manager</span><span>2021-2024</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EDUCATION</div>
+                            <div style="font-size: 8px; color: #999;">Psychology Degree • 2021</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-details">
+                    <h3 class="template-title">Purple Header</h3>
+                    <p class="template-summary">Elegant template with light purple header section</p>
+                    <div class="template-tags">
+                        <span class="tag">Purple</span>
+                        <span class="tag">Elegant</span>
+                    </div>
+                    <button class="choose-btn" onclick="selectTemplate('purple')">Choose Template</button>
+                </div>
+            </div>
+
+            <div class="template-box" data-template="orange">
+                <div class="template-display" style="background: linear-gradient(135deg, #fff3e0, #ffe0b3);">
+                    <div class="template-content">
+                        <div style="background: #fff3e0; padding: 12px; margin: -20px -20px 12px -20px; border-radius: 8px 8px 0 0; border-left: 4px solid #ff9800;">
+                            <div style="font-weight: bold; font-size: 12px;">James Wilson</div>
+                            <div style="font-size: 8px; color: #666;">james@email.com | +1 234 567 8900</div>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EXPERIENCE</div>
+                            <div style="font-size: 8px; color: #666; display: flex; justify-content: space-between;">
+                                <span>Project Manager</span><span>2020-2024</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">CERTIFICATIONS</div>
+                            <div style="font-size: 8px; color: #999;">PMP • Agile • Scrum Master</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-details">
+                    <h3 class="template-title">Orange Accent</h3>
+                    <p class="template-summary">Professional template with orange accent and light background</p>
+                    <div class="template-tags">
+                        <span class="tag">Accent</span>
+                        <span class="tag">Orange</span>
+                    </div>
+                    <button class="choose-btn" onclick="selectTemplate('orange')">Choose Template</button>
+                </div>
+            </div>
+
+            <div class="template-box" data-template="teal">
+                <div class="template-display" style="background: linear-gradient(135deg, #e0f2f1, #b2dfdb);">
+                    <div class="template-content">
+                        <div style="background: #e0f2f1; padding: 10px; margin: -20px -20px 10px -20px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: bold; font-size: 12px;">Sarah Davis</div>
+                                <div style="font-size: 8px; color: #666;">sarah@email.com</div>
+                            </div>
+                            <div style="font-size: 7px; color: #666; text-align: right;">Photo</div>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EXPERIENCE</div>
+                            <div style="font-size: 8px; color: #666; display: flex; justify-content: space-between;">
+                                <span>Nurse</span><span>2019-2024</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EDUCATION</div>
+                            <div style="font-size: 8px; color: #999;">Nursing Degree • 2019</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-details">
+                    <h3 class="template-title">Teal Split</h3>
+                    <p class="template-summary">Clean layout with teal header and photo placement</p>
+                    <div class="template-tags">
+                        <span class="tag">Teal</span>
+                        <span class="tag">Split</span>
+                    </div>
+                    <button class="choose-btn" onclick="selectTemplate('teal')">Choose Template</button>
+                </div>
+            </div>
+
+            <div class="template-box" data-template="pink">
+                <div class="template-display" style="background: linear-gradient(135deg, #fce4ec, #f8bbd9);">
+                    <div class="template-content">
+                        <div style="background: #fce4ec; padding: 12px; margin: -20px -20px 12px -20px; border-radius: 8px 8px 0 0; text-align: center;">
+                            <div style="font-weight: bold; font-size: 12px;">Anna Rodriguez</div>
+                            <div style="font-size: 8px; color: #666;">anna@email.com | +1 234 567 8900</div>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EXPERIENCE</div>
+                            <div style="font-size: 8px; color: #666; display: flex; justify-content: space-between;">
+                                <span>Teacher</span><span>2020-2024</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EDUCATION</div>
+                            <div style="font-size: 8px; color: #999;">Education Degree • 2020</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-details">
+                    <h3 class="template-title">Pink Modern</h3>
+                    <p class="template-summary">Centered layout with soft pink header for personal details</p>
+                    <div class="template-tags">
+                        <span class="tag">Pink</span>
+                        <span class="tag">Centered</span>
+                    </div>
+                    <button class="choose-btn" onclick="selectTemplate('pink')">Choose Template</button>
+                </div>
+            </div>
+
+            <div class="template-box" data-template="gray">
+                <div class="template-display" style="background: linear-gradient(135deg, #f5f5f5, #e0e0e0);">
+                    <div class="template-content">
+                        <div style="background: #f5f5f5; padding: 12px; margin: -20px -20px 12px -20px; border-radius: 8px 8px 0 0; border-bottom: 3px solid #9e9e9e;">
+                            <div style="font-weight: bold; font-size: 12px;">Michael Chen</div>
+                            <div style="font-size: 8px; color: #666;">michael@email.com | DOB: 30/09/1987</div>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EXPERIENCE</div>
+                            <div style="font-size: 8px; color: #666; display: flex; justify-content: space-between;">
+                                <span>Senior Engineer</span><span>2018-2024</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">SKILLS</div>
+                            <div style="font-size: 8px; color: #999;">Java • Spring • Microservices</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-details">
+                    <h3 class="template-title">Gray Professional</h3>
+                    <p class="template-summary">Corporate template with gray header and professional styling</p>
+                    <div class="template-tags">
+                        <span class="tag">Corporate</span>
+                        <span class="tag">Gray</span>
+                    </div>
+                    <button class="choose-btn" onclick="selectTemplate('gray')">Choose Template</button>
+                </div>
+            </div>
+
+            <div class="template-box" data-template="modern-professional">
+                <div class="template-display" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <div class="template-content" style="display: flex; flex-direction: column;">
+                        <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 12px; margin: -20px -20px 10px -20px; border-radius: 8px 8px 0 0; display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 35px; height: 45px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 6px; color: white;">IMG</div>
+                            <div>
+                                <div style="font-weight: bold; font-size: 12px; color: white;">Alex Johnson</div>
+                                <div style="font-size: 8px; color: white; opacity: 0.9;">alex@email.com</div>
+                            </div>
+                        </div>
+                        <div style="flex: 1; background: white; margin: 0 -20px; padding: 8px 20px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">EXPERIENCE</div>
+                            <div style="font-size: 8px; color: #666; display: flex; justify-content: space-between;">
+                                <span>Business Manager</span><span>2020-2024</span>
+                            </div>
+                        </div>
+                        <div style="flex: 1; background: white; margin: 0 -20px -20px -20px; padding: 8px 20px; border-radius: 0 0 8px 8px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #2c3e50; margin-bottom: 5px;">SKILLS</div>
+                            <div style="font-size: 8px; color: #999;">Leadership • Strategy • Innovation</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template-details">
+                    <h3 class="template-title">Modern Professional</h3>
+                    <p class="template-summary">Corporate gradient design with modern professional styling</p>
+                    <div class="template-tags">
+                        <span class="tag">Modern</span>
+                        <span class="tag">Gradient</span>
+                    </div>
+                    <button class="choose-btn" onclick="selectTemplate('modern-professional')">Choose Template</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="selection-panel" id="selection-panel">
+            <h4>Selected Template: <span id="selected-template">None</span></h4>
+            <p>You can change your template anytime during the resume building process.</p>
+            <a href="#" id="proceed-link" class="proceed-btn">Continue with Selected Template</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectTemplate(templateName) {
+    document.querySelectorAll('.template-box').forEach(box => {
+        box.classList.remove('active');
+    });
+    
+    document.querySelector(`[data-template="${templateName}"]`).classList.add('active');
+    
+    document.getElementById('selected-template').textContent = templateName.charAt(0).toUpperCase() + templateName.slice(1);
+    document.getElementById('selection-panel').classList.add('show');
+    document.getElementById('proceed-link').href = `/create-with-template/${templateName}/`;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Resume - {{ template_display }} Template{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/resume-builder.css' %}">
+<link rel="stylesheet" href="{% static 'css/home-gradient.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="builder-container">
+    <div class="builder-sidebar">
+        <div class="p-3">
+            <div class="d-flex align-items-center mb-4">
+                <i class="fas fa-palette me-2" style="color: #667eea; font-size: 1.5rem;"></i>
+                <h4 class="mb-0" style="color: #2c3e50;">{{ template_display }} Template</h4>
+            </div>
+            
+            <!-- Personal Information -->
+            <div class="form-section">
+                <h5 class="section-title">
+                    <i class="fas fa-user"></i> Personal Information
+                </h5>
+                <form method="post" enctype="multipart/form-data" id="resume-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="form-label">Resume Title</label>
+                        <input type="text" class="form-control" name="title" value="Senior Software Engineer Resume" id="id_title">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="full_name" value="John Smith" id="id_full_name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" value="john.smith@email.com" id="id_email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="text" class="form-control" name="phone" value="+1 (555) 123-4567" id="id_phone">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" name="address" value="123 Main Street, New York, NY 10001" id="id_address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Professional Summary</label>
+                        <textarea class="form-control" name="summary" rows="4" id="id_summary">Experienced software engineer with 5+ years of expertise in full-stack development, specializing in React, Node.js, and cloud technologies. Proven track record of delivering scalable applications and leading cross-functional teams to achieve project goals.</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Profile Photo</label>
+                        <input type="file" class="form-control" name="photo" accept="image/*" id="id_photo">
+                        <small class="text-muted">For testing: C:\Users\amalj\Downloads\IMG_20230809_082953_11zon.jpg</small>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Experience Section -->
+            <div class="form-section">
+                <h5 class="section-title">
+                    <i class="fas fa-briefcase"></i> Work Experience
+                </h5>
+                <div id="experience-list">
+                    <!-- Experience items will be added here -->
+                </div>
+                <div class="add-item-btn" onclick="addExperience()">
+                    <i class="fas fa-plus me-2"></i>Add Work Experience
+                </div>
+            </div>
+            
+            <!-- Education Section -->
+            <div class="form-section">
+                <h5 class="section-title">
+                    <i class="fas fa-graduation-cap"></i> Education
+                </h5>
+                <div id="education-list">
+                    <!-- Education items will be added here -->
+                </div>
+                <div class="add-item-btn" onclick="addEducation()">
+                    <i class="fas fa-plus me-2"></i>Add Education
+                </div>
+            </div>
+            
+            <!-- Skills Section -->
+            <div class="form-section">
+                <h5 class="section-title">
+                    <i class="fas fa-cogs"></i> Skills
+                </h5>
+                <div id="skills-list">
+                    <!-- Skills will be added here -->
+                </div>
+                <div class="add-item-btn" onclick="addSkill()">
+                    <i class="fas fa-plus me-2"></i>Add Skill
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2 mt-4">
+                <a href="{% url 'create_resume' %}" class="btn btn-outline-modern">Back to Templates</a>
+                <button type="button" class="btn btn-outline-modern" onclick="showPreview()">Live Preview</button>
+                <button type="button" class="btn btn-modern flex-fill" onclick="submitResume()">Create Resume</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/resume-builder.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Preview Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-btn { 
+            background: #667eea; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resume Preview Test</h1>
+    <p>This is a test page to verify the A4 preview functionality works correctly.</p>
+    
+    <button class="test-btn" onclick="showPreview()">Test Live Preview</button>
+    
+    <!-- Hidden form elements for testing -->
+    <input type="hidden" id="id_full_name" value="John Smith">
+    <input type="hidden" id="id_email" value="john.smith@email.com">
+    <input type="hidden" id="id_phone" value="+1 (555) 123-4567">
+    <input type="hidden" id="id_address" value="123 Main Street, New York, NY 10001">
+    <textarea id="id_summary" style="display:none;">Experienced software engineer with 5+ years of expertise in full-stack development, specializing in React, Node.js, and cloud technologies. Proven track record of delivering scalable applications and leading cross-functional teams to achieve project goals.</textarea>
+    
+    <script>
+        // Mock variables for testing
+        let experienceCount = 2;
+        let educationCount = 1;
+        let skillCount = 3;
+        
+        // Create mock form elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mock experience data
+            for (let i = 1; i <= experienceCount; i++) {
+                const expData = [
+                    { position: 'Senior Software Engineer', company: 'Tech Solutions Inc.', start: '2020-01-15', end: '2024-11-01', desc: 'Led development of scalable web applications using React and Node.js.' },
+                    { position: 'Full Stack Developer', company: 'Digital Innovations LLC', start: '2018-06-01', end: '2019-12-31', desc: 'Developed responsive web applications and RESTful APIs.' }
+                ];
+                
+                const data = expData[i-1];
+                document.body.innerHTML += `
+                    <input type="hidden" id="exp_position_${i}" value="${data.position}">
+                    <input type="hidden" id="exp_company_${i}" value="${data.company}">
+                    <input type="hidden" id="exp_start_${i}" value="${data.start}">
+                    <input type="hidden" id="exp_end_${i}" value="${data.end}">
+                    <input type="hidden" id="exp_desc_${i}" value="${data.desc}">
+                `;
+            }
+            
+            // Mock education data
+            document.body.innerHTML += `
+                <input type="hidden" id="edu_degree_1" value="Bachelor of Computer Science">
+                <input type="hidden" id="edu_institution_1" value="University of Technology">
+                <input type="hidden" id="edu_field_1" value="Computer Science">
+                <input type="hidden" id="edu_end_1" value="2019-05-15">
+            `;
+            
+            // Mock skills data
+            const skills = ['JavaScript', 'React', 'Node.js'];
+            const levels = ['Expert', 'Advanced', 'Advanced'];
+            for (let i = 1; i <= skillCount; i++) {
+                document.body.innerHTML += `
+                    <input type="hidden" id="skill_name_${i}" value="${skills[i-1]}">
+                    <input type="hidden" id="skill_level_${i}" value="${levels[i-1]}">
+                `;
+            }
+        });
+        
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+        }
+    </script>
+    
+    <script src="static/js/resume-builder.js"></script>
+</body>
+</html>

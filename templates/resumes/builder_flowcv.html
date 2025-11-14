@@ -1,0 +1,930 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Resume Builder - FlowCV Style{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.css">
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        overflow: hidden;
+    }
+    
+    .builder-layout {
+        display: flex;
+        height: 100vh;
+        background: #f5f7fa;
+    }
+    
+    /* Left Sidebar - Editor */
+    .editor-panel {
+        width: 420px;
+        background: white;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    .editor-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    .editor-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 8px;
+    }
+    
+    .editor-subtitle {
+        font-size: 14px;
+        color: #6b7280;
+    }
+    
+    .editor-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px;
+    }
+    
+    .section-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: all 0.2s;
+    }
+    
+    .section-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+    }
+    
+    .section-header {
+        padding: 16px 20px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: move;
+    }
+    
+    .section-header h3 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .section-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        transition: all 0.2s;
+    }
+    
+    .btn-icon:hover {
+        background: #f3f4f6;
+        color: #667eea;
+    }
+    
+    .section-body {
+        padding: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 16px;
+    }
+    
+    .form-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 6px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    
+    /* Add Item Button */
+    .add-section-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s;
+        width: 100%;
+        margin-top: 12px;
+    }
+    
+    .add-section-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .add-item-btn {
+        background: #f9fafb;
+        border: 2px dashed #d1d5db;
+        color: #6b7280;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s;
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: 12px;
+    }
+    
+    .add-item-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        background: rgba(102, 126, 234, 0.05);
+    }
+    
+    /* Preview Panel */
+    .preview-panel {
+        flex: 1;
+        background: #f5f7fa;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    .preview-toolbar {
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .toolbar-actions {
+        display: flex;
+        gap: 12px;
+    }
+    
+    .btn-toolbar {
+        padding: 8px 16px;
+        border: 1px solid #d1d5db;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+    
+    .btn-toolbar:hover {
+        border-color: #667eea;
+        color: #667eea;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .preview-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .resume-preview {
+        width: 210mm;
+        min-height: 297mm;
+        background: white;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        padding: 20mm;
+        transform: scale(0.8);
+        transform-origin: top center;
+        margin-bottom: 40px;
+    }
+    
+    /* Resume Styles */
+    .resume-header {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--primary-color, #667eea);
+    }
+    
+    .resume-name {
+        font-size: 32px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 8px;
+    }
+    
+    .resume-contact {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        font-size: 13px;
+        color: #6b7280;
+    }
+    
+    .resume-contact-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .resume-section {
+        margin-bottom: 28px;
+    }
+    
+    .resume-section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--primary-color, #667eea);
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .resume-item {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .resume-item:last-child {
+        border-bottom: none;
+    }
+    
+    .item-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    
+    .item-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #111827;
+    }
+    
+    .item-subtitle {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 4px;
+    }
+    
+    .item-date {
+        font-size: 13px;
+        color: #9ca3af;
+    }
+    
+    .item-description {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #4b5563;
+    }
+    
+    .skills-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .skill-badge {
+        padding: 6px 14px;
+        background: #f3f4f6;
+        border-radius: 16px;
+        font-size: 12px;
+        color: #374151;
+        font-weight: 500;
+    }
+    
+    /* Sidebar Toggle for Mobile */
+    .mobile-toggle {
+        display: none;
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        cursor: pointer;
+        z-index: 1000;
+    }
+    
+    @media (max-width: 1024px) {
+        .editor-panel {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 999;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+        
+        .editor-panel.active {
+            transform: translateX(0);
+        }
+        
+        .mobile-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+    
+    /* Auto-save indicator */
+    .autosave-indicator {
+        font-size: 13px;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .autosave-indicator.saving {
+        color: #f59e0b;
+    }
+    
+    .autosave-indicator.saved {
+        color: #10b981;
+    }
+    
+    .section-items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .draggable-handle {
+        cursor: move;
+        color: #9ca3af;
+    }
+    
+    .item-card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 12px;
+    }
+    
+    .item-info {
+        flex: 1;
+    }
+    
+    .item-info-title {
+        font-weight: 600;
+        font-size: 14px;
+        color: #111827;
+        margin-bottom: 4px;
+    }
+    
+    .item-info-subtitle {
+        font-size: 12px;
+        color: #6b7280;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="builder-layout">
+    <!-- Editor Panel -->
+    <div class="editor-panel" id="editorPanel">
+        <div class="editor-header">
+            <div class="editor-title">{{ resume.title|default:"New Resume" }}</div>
+            <div class="editor-subtitle">
+                <span class="autosave-indicator" id="autosaveStatus">
+                    <i class="fas fa-check-circle"></i> All changes saved
+                </span>
+            </div>
+        </div>
+        
+        <div class="editor-content" id="sectionsContainer">
+            <!-- Personal Information Section -->
+            <div class="section-card" data-section="personal">
+                <div class="section-header">
+                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="full_name" value="{{ resume.full_name }}" placeholder="John Doe">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="{{ resume.email }}" placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="text" class="form-control" id="phone" value="{{ resume.phone }}" placeholder="+1 234 567 8900">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" value="{{ resume.address }}" placeholder="City, State, Country">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Professional Summary Section -->
+            <div class="section-card" data-section="summary">
+                <div class="section-header">
+                    <h3><i class="fas fa-align-left"></i> Professional Summary</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="form-group">
+                        <textarea class="form-control" id="summary" rows="4" placeholder="Brief professional summary...">{{ resume.summary }}</textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Work Experience Section -->
+            <div class="section-card" data-section="experience">
+                <div class="section-header">
+                    <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="section-items-list" id="experienceList">
+                        {% for exp in experience_list %}
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-info-title">{{ exp.position }}</div>
+                                <div class="item-info-subtitle">{{ exp.company }} • {{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y"|default:"Present" }}</div>
+                            </div>
+                            <div class="section-actions">
+                                <button class="btn-icon" onclick="editExperience({{ exp.id }})"><i class="fas fa-edit"></i></button>
+                                <button class="btn-icon" onclick="deleteExperience({{ exp.id }})"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="add-item-btn" onclick="addExperience()">
+                        <i class="fas fa-plus"></i> Add Experience
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Education Section -->
+            <div class="section-card" data-section="education">
+                <div class="section-header">
+                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="section-items-list" id="educationList">
+                        {% for edu in education_list %}
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-info-title">{{ edu.degree }}</div>
+                                <div class="item-info-subtitle">{{ edu.institution }} • {{ edu.end_date|date:"Y" }}</div>
+                            </div>
+                            <div class="section-actions">
+                                <button class="btn-icon" onclick="editEducation({{ edu.id }})"><i class="fas fa-edit"></i></button>
+                                <button class="btn-icon" onclick="deleteEducation({{ edu.id }})"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="add-item-btn" onclick="addEducation()">
+                        <i class="fas fa-plus"></i> Add Education
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Skills Section -->
+            <div class="section-card" data-section="skills">
+                <div class="section-header">
+                    <h3><i class="fas fa-cogs"></i> Skills</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="section-items-list" id="skillsList">
+                        {% for skill in skills_list %}
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div class="item-info-title">{{ skill.name }}</div>
+                                <div class="item-info-subtitle">{{ skill.proficiency }}</div>
+                            </div>
+                            <div class="section-actions">
+                                <button class="btn-icon" onclick="deleteSkill({{ skill.id }})"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="add-item-btn" onclick="addSkill()">
+                        <i class="fas fa-plus"></i> Add Skill
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Add More Sections -->
+            <div class="section-card" data-section="add-more">
+                <div class="section-header">
+                    <h3><i class="fas fa-plus-circle"></i> Add More Sections</h3>
+                </div>
+                <div class="section-body">
+                    <button class="add-item-btn" onclick="addProjectSection()">
+                        <i class="fas fa-project-diagram"></i> Projects
+                    </button>
+                    <button class="add-item-btn" onclick="addCertificationSection()">
+                        <i class="fas fa-certificate"></i> Certifications
+                    </button>
+                    <button class="add-item-btn" onclick="addLanguageSection()">
+                        <i class="fas fa-language"></i> Languages
+                    </button>
+                    <button class="add-item-btn" onclick="addReferenceSection()">
+                        <i class="fas fa-user-friends"></i> References
+                    </button>
+                    <button class="add-item-btn" onclick="addCustomSection()">
+                        <i class="fas fa-pen"></i> Custom Section
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+        <div class="preview-toolbar">
+            <div class="toolbar-actions">
+                <button class="btn-toolbar" onclick="toggleTemplate()">
+                    <i class="fas fa-paint-brush"></i> Template
+                </button>
+                <button class="btn-toolbar" onclick="customizeColors()">
+                    <i class="fas fa-palette"></i> Customize
+                </button>
+            </div>
+            <div class="toolbar-actions">
+                <button class="btn-toolbar" onclick="downloadPDF()">
+                    <i class="fas fa-file-pdf"></i> Export PDF
+                </button>
+                <button class="btn-toolbar btn-primary" onclick="saveResume()">
+                    <i class="fas fa-save"></i> Save Resume
+                </button>
+            </div>
+        </div>
+        
+        <div class="preview-content">
+            <div class="resume-preview" id="resumePreview">
+                <!-- Preview will be rendered here -->
+                <div class="resume-header">
+                    <div class="resume-name" id="preview-name">{{ resume.full_name|default:"Your Name" }}</div>
+                    <div class="resume-contact">
+                        <div class="resume-contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span id="preview-email">{{ resume.email|default:"email@example.com" }}</span>
+                        </div>
+                        <div class="resume-contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span id="preview-phone">{{ resume.phone|default:"+1 234 567 8900" }}</span>
+                        </div>
+                        <div class="resume-contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="preview-address">{{ resume.address|default:"City, State" }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if resume.summary %}
+                <div class="resume-section">
+                    <div class="resume-section-title">Professional Summary</div>
+                    <div id="preview-summary">{{ resume.summary }}</div>
+                </div>
+                {% endif %}
+                
+                {% if experience_list %}
+                <div class="resume-section">
+                    <div class="resume-section-title">Work Experience</div>
+                    <div id="preview-experience">
+                        {% for exp in experience_list %}
+                        <div class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <div class="item-title">{{ exp.position }}</div>
+                                    <div class="item-subtitle">{{ exp.company }}</div>
+                                </div>
+                                <div class="item-date">{{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y"|default:"Present" }}</div>
+                            </div>
+                            <div class="item-description">{{ exp.description }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if education_list %}
+                <div class="resume-section">
+                    <div class="resume-section-title">Education</div>
+                    <div id="preview-education">
+                        {% for edu in education_list %}
+                        <div class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <div class="item-title">{{ edu.degree }}</div>
+                                    <div class="item-subtitle">{{ edu.institution }}</div>
+                                </div>
+                                <div class="item-date">{{ edu.end_date|date:"Y" }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if skills_list %}
+                <div class="resume-section">
+                    <div class="resume-section-title">Skills</div>
+                    <div class="skills-grid" id="preview-skills">
+                        {% for skill in skills_list %}
+                        <div class="skill-badge">{{ skill.name }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="mobile-toggle" onclick="toggleMobileEditor()">
+    <i class="fas fa-bars"></i>
+</button>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+let autoSaveTimeout;
+const RESUME_ID = {{ resume.id|default:0 }};
+
+// Initialize Sortable for sections
+document.addEventListener('DOMContentLoaded', function() {
+    const sectionsContainer = document.getElementById('sectionsContainer');
+    if (sectionsContainer) {
+        new Sortable(sectionsContainer, {
+            animation: 150,
+            handle: '.section-header',
+            ghostClass: 'sortable-ghost',
+            onEnd: function() {
+                autoSave();
+            }
+        });
+    }
+    
+    // Real-time preview updates
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('input', function() {
+            updatePreview(this);
+            autoSave();
+        });
+    });
+});
+
+function toggleSection(button) {
+    const sectionBody = button.closest('.section-card').querySelector('.section-body');
+    const icon = button.querySelector('i');
+    
+    if (sectionBody.style.display === 'none') {
+        sectionBody.style.display = 'block';
+        icon.className = 'fas fa-chevron-up';
+    } else {
+        sectionBody.style.display = 'none';
+        icon.className = 'fas fa-chevron-down';
+    }
+}
+
+function updatePreview(input) {
+    const id = input.id;
+    const value = input.value;
+    const previewElement = document.getElementById(`preview-${id}`);
+    
+    if (previewElement) {
+        previewElement.textContent = value || getPlaceholder(id);
+    }
+}
+
+function getPlaceholder(id) {
+    const placeholders = {
+        'full_name': 'Your Name',
+        'email': 'email@example.com',
+        'phone': '+1 234 567 8900',
+        'address': 'City, State'
+    };
+    return placeholders[id] || '';
+}
+
+function autoSave() {
+    clearTimeout(autoSaveTimeout);
+    
+    const indicator = document.getElementById('autosaveStatus');
+    indicator.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    indicator.className = 'autosave-indicator saving';
+    
+    autoSaveTimeout = setTimeout(() => {
+        // Perform save
+        const data = collectFormData();
+        
+        fetch(`/resumes/api/save/${RESUME_ID}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            indicator.innerHTML = '<i class="fas fa-check-circle"></i> All changes saved';
+            indicator.className = 'autosave-indicator saved';
+        })
+        .catch(error => {
+            indicator.innerHTML = '<i class="fas fa-exclamation-circle"></i> Save failed';
+            console.error('Error:', error);
+        });
+    }, 1000);
+}
+
+function collectFormData() {
+    return {
+        full_name: document.getElementById('full_name')?.value || '',
+        email: document.getElementById('email')?.value || '',
+        phone: document.getElementById('phone')?.value || '',
+        address: document.getElementById('address')?.value || '',
+        summary: document.getElementById('summary')?.value || ''
+    };
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function addExperience() {
+    window.location.href = `/resumes/${RESUME_ID}/add-experience/`;
+}
+
+function addEducation() {
+    window.location.href = `/resumes/${RESUME_ID}/add-education/`;
+}
+
+function addSkill() {
+    window.location.href = `/resumes/${RESUME_ID}/add-skill/`;
+}
+
+function downloadPDF() {
+    window.print();
+}
+
+function saveResume() {
+    autoSave();
+    setTimeout(() => {
+        alert('Resume saved successfully!');
+    }, 500);
+}
+
+function toggleMobileEditor() {
+    document.getElementById('editorPanel').classList.toggle('active');
+}
+
+// Placeholder functions for new sections
+function addProjectSection() {
+    alert('Project section feature coming soon!');
+}
+
+function addCertificationSection() {
+    alert('Certification section feature coming soon!');
+}
+
+function addLanguageSection() {
+    alert('Language section feature coming soon!');
+}
+
+function addReferenceSection() {
+    alert('Reference section feature coming soon!');
+}
+
+function addCustomSection() {
+    alert('Custom section feature coming soon!');
+}
+
+function toggleTemplate() {
+    alert('Template selection feature coming soon!');
+}
+
+function customizeColors() {
+    alert('Color customization feature coming soon!');
+}
+</script>
+{% endblock %}

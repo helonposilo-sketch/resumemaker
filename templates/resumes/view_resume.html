@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ resume.title }} - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>{{ resume.title }}</h2>
+            <div>
+                <a href="{% url 'edit_resume' resume.id %}" class="btn btn-primary">
+                    <i class="fas fa-edit me-2"></i>Edit Resume
+                </a>
+                <button class="btn btn-success" onclick="window.print()">
+                    <i class="fas fa-download me-2"></i>Download PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="resume-preview bg-white shadow rounded" style="max-width: 800px; margin: 0 auto;" id="resume-content">
+    {% if resume.template == 'colored' %}
+        <!-- Beige Header Template -->
+        <div class="resume-header" style="background: #f5f5dc; padding: 30px; display: flex; align-items: center; gap: 20px;">
+            {% if resume.photo %}
+                <img src="{{ resume.photo.url }}" style="width: 80px; height: 100px; object-fit: cover; border-radius: 8px;">
+            {% else %}
+                <div style="width: 80px; height: 100px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #666;">Photo</div>
+            {% endif %}
+            <div>
+                <h1 style="font-weight: bold; margin: 0;">{{ resume.full_name }}</h1>
+                <p style="margin: 5px 0; color: #666;">{{ resume.email }} | {{ resume.phone }}</p>
+                <p style="margin: 0; color: #666; font-size: 14px;">{{ resume.address }}</p>
+            </div>
+        </div>
+        <div style="padding: 30px;">
+    {% elif resume.template == 'green' %}
+        <!-- Green Header Template -->
+        <div class="resume-header" style="background: #e8f5e8; padding: 30px; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-weight: bold;">{{ resume.full_name }}</h1>
+            <p style="margin: 5px 0; color: #666;">{{ resume.email }} | {{ resume.phone }}</p>
+            <p style="margin: 0; color: #666;">{{ resume.address }}</p>
+        </div>
+        <div style="padding: 30px;">
+    {% elif resume.template == 'purple' %}
+        <!-- Purple Header Template -->
+        <div class="resume-header" style="background: #f3e5f5; padding: 30px; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-weight: bold;">{{ resume.full_name }}</h1>
+            <p style="margin: 5px 0; color: #666;">{{ resume.email }} | {{ resume.phone }}</p>
+            <p style="margin: 0; color: #666;">{{ resume.address }}</p>
+        </div>
+        <div style="padding: 30px;">
+    {% elif resume.template == 'orange' %}
+        <!-- Orange Accent Template -->
+        <div class="resume-header" style="background: #fff3e0; padding: 30px; border-radius: 10px 10px 0 0; border-left: 8px solid #ff9800;">
+            <h1 style="margin: 0; font-weight: bold;">{{ resume.full_name }}</h1>
+            <p style="margin: 5px 0; color: #666;">{{ resume.email }} | {{ resume.phone }}</p>
+            <p style="margin: 0; color: #666;">{{ resume.address }}</p>
+        </div>
+        <div style="padding: 30px;">
+    {% elif resume.template == 'teal' %}
+        <!-- Teal Split Template -->
+        <div class="resume-header" style="background: #e0f2f1; padding: 30px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 style="margin: 0; font-weight: bold;">{{ resume.full_name }}</h1>
+                <p style="margin: 5px 0; color: #666;">{{ resume.email }} | {{ resume.phone }}</p>
+                <p style="margin: 0; color: #666;">{{ resume.address }}</p>
+            </div>
+            {% if resume.photo %}
+                <img src="{{ resume.photo.url }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+            {% endif %}
+        </div>
+        <div style="padding: 30px;">
+    {% elif resume.template == 'pink' %}
+        <!-- Pink Modern Template -->
+        <div class="resume-header" style="background: #fce4ec; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="margin: 0; font-weight: bold;">{{ resume.full_name }}</h1>
+            <p style="margin: 10px 0; color: #666;">{{ resume.email }} | {{ resume.phone }}</p>
+            <p style="margin: 0; color: #666;">{{ resume.address }}</p>
+            {% if resume.photo %}
+                <img src="{{ resume.photo.url }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-top: 15px;">
+            {% endif %}
+        </div>
+        <div style="padding: 30px;">
+    {% elif resume.template == 'gray' %}
+        <!-- Gray Professional Template -->
+        <div class="resume-header" style="background: #f5f5f5; padding: 30px; border-radius: 10px 10px 0 0; border-bottom: 5px solid #9e9e9e;">
+            <h1 style="margin: 0; font-weight: bold;">{{ resume.full_name }}</h1>
+            <p style="margin: 5px 0; color: #666;">{{ resume.email }} | {{ resume.phone }}</p>
+            <p style="margin: 0; color: #666;">{{ resume.address }}</p>
+        </div>
+        <div style="padding: 30px;">
+    {% elif resume.template == 'modern-professional' %}
+        <!-- Modern Professional Template -->
+        <div style="position: relative; min-height: 100%;">
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 35%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 30px; box-sizing: border-box;">
+                {% if resume.photo %}
+                    <img src="{{ resume.photo.url }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin: 0 auto 15px; display: block;">
+                {% else %}
+                    <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">Photo</div>
+                {% endif %}
+                <h3 style="color: white; font-weight: bold; margin-bottom: 10px; font-size: 14px;">CONTACT</h3>
+                <p style="margin: 5px 0; font-size: 11px;">{{ resume.email }}</p>
+                <p style="margin: 5px 0; font-size: 11px;">{{ resume.phone }}</p>
+                <p style="margin: 5px 0; font-size: 11px;">{{ resume.address }}</p>
+                {% if resume.skills.all %}
+                <h3 style="color: white; font-weight: bold; margin: 20px 0 10px 0; font-size: 14px;">SKILLS</h3>
+                {% for skill in resume.skills.all %}
+                <p style="margin: 3px 0; font-size: 10px;">• {{ skill.name }} ({{ skill.proficiency }})</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div style="margin-left: 35%; padding: 30px; box-sizing: border-box;">
+                <h1 style="color: #667eea; font-weight: bold; margin: 0 0 5px 0;">{{ resume.full_name }}</h1>
+                <div style="color: #764ba2; font-size: 16px; margin-bottom: 20px;">Professional</div>
+    {% else %}
+        <!-- Default Template -->
+        <div class="resume-header" style="padding: 30px; text-align: center; border-bottom: 2px solid #007bff;">
+            <h1 style="margin: 0; font-weight: bold; color: #007bff;">{{ resume.full_name }}</h1>
+            <p style="margin: 10px 0; color: #666;">{{ resume.email }} | {{ resume.phone }} | {{ resume.address }}</p>
+        </div>
+        <div style="padding: 30px;">
+    {% endif %}
+
+    {% if resume.summary %}
+    <div style="margin-bottom: 30px;">
+        <h3 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Professional Summary</h3>
+        <p style="line-height: 1.6;">{{ resume.summary }}</p>
+    </div>
+    {% endif %}
+
+    {% if resume.experience.all %}
+    <div style="margin-bottom: 30px;">
+        <h3 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Work Experience</h3>
+        {% for exp in resume.experience.all %}
+        {% if forloop.counter0 == 2 %}
+        <div style="page-break-before: always;"></div>
+        {% endif %}
+        <div class="experience-item" style="margin-bottom: 20px; page-break-inside: avoid;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="margin: 0; color: #333;">{{ exp.position }}</h4>
+                <span style="color: #666; font-size: 14px;">
+                    {{ exp.start_date|date:"M Y" }} - 
+                    {% if exp.is_current %}Present{% else %}{{ exp.end_date|date:"M Y" }}{% endif %}
+                </span>
+            </div>
+            <h5 style="margin: 5px 0; color: #666;">{{ exp.company }}</h5>
+            <p style="line-height: 1.6;">{{ exp.description }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if resume.education.all %}
+    {% if resume.experience.all and resume.experience.all|length > 2 %}
+    <div style="page-break-before: always;"></div>
+    {% endif %}
+    <div style="margin-bottom: 30px;">
+        <h3 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Education</h3>
+        {% for edu in resume.education.all %}
+        <div class="education-item" style="margin-bottom: 20px; page-break-inside: avoid;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="margin: 0; color: #333;">{{ edu.degree }} in {{ edu.field_of_study }}</h4>
+                <span style="color: #666; font-size: 14px;">
+                    {{ edu.start_date|date:"Y" }} - 
+                    {% if edu.end_date %}{{ edu.end_date|date:"Y" }}{% else %}Present{% endif %}
+                </span>
+            </div>
+            <h5 style="margin: 5px 0; color: #666;">{{ edu.institution }}</h5>
+            {% if edu.gpa %}
+            <p style="margin: 0;">GPA: {{ edu.gpa }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if resume.skills.all and resume.template != 'modern-professional' %}
+    <div style="margin-bottom: 30px;">
+        <h3 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Skills</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            {% for skill in resume.skills.all %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f8f9fa; border-radius: 5px;">
+                <span>{{ skill.name }}</span>
+                <span style="background: #6c757d; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px;">{{ skill.proficiency }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if resume.template == 'modern-professional' %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+/* Screen view - normal scroll */
+@media screen {
+    .resume-preview {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+}
+
+@media print {
+    /* Hide all navigation and UI elements */
+    .navbar, .custom-navbar, nav, footer, .btn, .row, .d-flex, .justify-content-between, .align-items-center, 
+    .alert, .messages, .subscription-form, .footer-section, .copyright,
+    [class*="nav"], [class*="header"], [class*="footer"], 
+    [class*="breadcrumb"], [class*="sidebar"], [class*="menu"],
+    .mt-, .mb-, .pt-, .pb-, .mx-, .my-, .px-, .py- {
+        display: none !important;
+    }
+    
+    /* Ensure only the resume content is printed */
+    #resume-content {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        page-break-inside: avoid;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+        background: white !important;
+        color: black !important;
+    }
+    
+    @page {
+        size: A4;
+        margin: 0.5in;
+    }
+    
+    .resume-preview {
+        box-shadow: none !important;
+        max-width: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: white !important;
+        color: black !important;
+    }
+    
+    /* Prevent page breaks inside resume sections */
+    .experience-item, .education-item, .skill-item {
+        page-break-inside: avoid;
+    }
+    
+    /* Ensure text colors are readable */
+    h1, h2, h3, h4, h5, h6, p, div {
+        color: black !important;
+        background: transparent !important;
+    }
+    
+    /* Specifically hide the promotional text in footer */
+    .footer-section {
+        display: none !important;
+    }
+}
+
+<!-- Specific styles for the modern professional template -->
+{% if resume.template == 'modern-professional' %}
+<style>
+@media print {
+    @page {
+        margin: 0;
+    }
+    
+    .resume-preview::before {
+        content: '';
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 35%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        z-index: -1;
+    }
+}
+</style>
+{% endif %}
+
+{% endblock %}

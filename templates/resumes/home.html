@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Professional Resume Builder - Create Stunning CVs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/resume-gallery.css' %}">
+<link rel="stylesheet" href="{% static 'css/zoom-effects.css' %}">
+<link rel="stylesheet" href="{% static 'css/home-gradient.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Professional Resume <span class="d-block">Builder Platform</span></h1>
+                    <p class="mb-4">Create stunning, ATS-friendly resumes in minutes. Our professional templates and easy-to-use builder help you land your dream job with confidence.</p>
+                    <p>
+                        {% if not user.is_authenticated %}
+                            <a href="{% url 'signup' %}" class="btn btn-secondary me-2">Get Started Free</a>
+                            <a href="{% url 'login' %}" class="btn btn-white-outline">Login</a>
+                        {% else %}
+                            <a href="{% url 'create_resume' %}" class="btn btn-secondary me-2">Create Resume</a>
+                            <a href="{% url 'resume_list' %}" class="btn btn-white-outline">My Resumes</a>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="resume-carousel">
+                    <div class="resume-row" id="resumeRow">
+                        <div class="resume-item"><img src="{% static 'images/resume1.jpg' %}" alt="Resume Template 1"></div>
+                        <div class="resume-item"><img src="{% static 'images/resume2.jpg' %}" alt="Resume Template 2"></div>
+                        <div class="resume-item"><img src="{% static 'images/resume3.jpg' %}" alt="Resume Template 3"></div>
+                    </div>
+                </div>
+                
+                <script>
+                const resumeImages = [
+                    '{% static "images/resume1.jpg" %}',
+                    '{% static "images/resume2.jpg" %}',
+                    '{% static "images/resume3.jpg" %}',
+                    '{% static "images/resume4.jpg" %}',
+                    '{% static "images/resume5.jpg" %}',
+                    '{% static "images/resume6.jpg" %}',
+                    '{% static "images/resume7.jpg" %}',
+                    '{% static "images/resume8.jpg" %}',
+                    '{% static "images/resume9.jpg" %}',
+                    '{% static "images/resume10.jpg" %}'
+                ];
+                
+                let currentIndex = 0;
+                
+                function rotateResumes() {
+                    const resumeRow = document.getElementById('resumeRow');
+                    const items = resumeRow.querySelectorAll('.resume-item img');
+                    
+                    items.forEach((img, index) => {
+                        const newIndex = (currentIndex + index) % resumeImages.length;
+                        img.src = resumeImages[newIndex];
+                        img.alt = `Resume Template ${newIndex + 1}`;
+                    });
+                    
+                    currentIndex = (currentIndex + 3) % resumeImages.length;
+                }
+                
+                setInterval(rotateResumes, 4000);
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<!-- Start Product Section -->
+<div class="product-section">
+    <div class="container">
+        <div class="row">
+            <!-- Start Column 1 -->
+            <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+                <h2 class="mb-4 section-title">Crafted with professional excellence.</h2>
+                <p class="mb-4">Our resume templates are designed by HR professionals and career experts to help you stand out in today's competitive job market.</p>
+                <p><a href="{% if user.is_authenticated %}{% url 'create_resume' %}{% else %}{% url 'signup' %}{% endif %}" class="btn">Get Started</a></p>
+            </div> 
+            <!-- End Column 1 -->
+
+            <!-- Start Column 2 -->
+            <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                <a class="product-item" href="{% if user.is_authenticated %}{% url 'create_resume' %}{% else %}{% url 'signup' %}{% endif %}">
+                    <img src="{% static 'images/product-template-1.jpg' %}" class="img-fluid product-thumbnail">
+                    <h3 class="product-title">Modern Template</h3>
+                    <strong class="product-price">Free</strong>
+                    <span class="icon-cross">
+                        <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                    </span>
+                </a>
+            </div> 
+            <!-- End Column 2 -->
+
+            <!-- Start Column 3 -->
+            <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                <a class="product-item" href="{% if user.is_authenticated %}{% url 'create_resume' %}{% else %}{% url 'signup' %}{% endif %}">
+                    <img src="{% static 'images/product-template-2.jpg' %}" class="img-fluid product-thumbnail">
+                    <h3 class="product-title">Professional CV</h3>
+                    <strong class="product-price">Free</strong>
+                    <span class="icon-cross">
+                        <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                    </span>
+                </a>
+            </div>
+            <!-- End Column 3 -->
+
+            <!-- Start Column 4 -->
+            <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                <a class="product-item" href="{% if user.is_authenticated %}{% url 'create_resume' %}{% else %}{% url 'signup' %}{% endif %}">
+                    <img src="{% static 'images/product-template-3.jpg' %}" class="img-fluid product-thumbnail">
+                    <h3 class="product-title">Executive Resume</h3>
+                    <strong class="product-price">Free</strong>
+                    <span class="icon-cross">
+                        <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                    </span>
+                </a>
+            </div>
+            <!-- End Column 4 -->
+        </div>
+    </div>
+</div>
+<!-- End Product Section -->
+
+<!-- Start Why Choose Us Section -->
+<div class="why-choose-section">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-6">
+                <h2 class="section-title">Why Choose Our Resume Builder</h2>
+                <p>Stand out from the competition with professionally designed resumes that get results. Our platform combines ease of use with powerful features to help you land your dream job.</p>
+
+                <div class="row my-5">
+                    <div class="col-6 col-md-6">
+                        <div class="feature">
+                            <div class="icon">
+                                <img src="{% static 'images/truck.svg' %}" alt="Image" class="imf-fluid">
+                            </div>
+                            <h3>Fast &amp; Easy Creation</h3>
+                            <p>Build your professional resume in minutes with our intuitive step-by-step builder and smart suggestions.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-6">
+                        <div class="feature">
+                            <div class="icon">
+                                <img src="{% static 'images/bag.svg' %}" alt="Image" class="imf-fluid">
+                            </div>
+                            <h3>ATS Optimized</h3>
+                            <p>Our templates are designed to pass Applicant Tracking Systems and get noticed by hiring managers.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-6">
+                        <div class="feature">
+                            <div class="icon">
+                                <img src="{% static 'images/support.svg' %}" alt="Image" class="imf-fluid">
+                            </div>
+                            <h3>Expert Support</h3>
+                            <p>Get career advice and resume tips from our team of HR professionals and career coaches.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-6">
+                        <div class="feature">
+                            <div class="icon">
+                                <img src="{% static 'images/return.svg' %}" alt="Image" class="imf-fluid">
+                            </div>
+                            <h3>Multiple Formats</h3>
+                            <p>Download your resume in PDF, Word, or other formats. Edit and update anytime with our cloud storage.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="img-wrap">
+                    <img src="{% static 'images/why-choose-us-img.jpg' %}" alt="Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Why Choose Us Section -->
+
+<!-- Start We Help Section -->
+<div class="we-help-section">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-7 mb-5 mb-lg-0">
+                <div class="imgs-grid">
+                    <div class="grid grid-1"><img src="{% static 'images/img-grid-1.jpg' %}" alt="Resume Builder"></div>
+                    <div class="grid grid-2"><img src="{% static 'images/img-grid-2.jpg' %}" alt="Resume Builder"></div>
+                    <div class="grid grid-3"><img src="{% static 'images/img-grid-3.jpg' %}" alt="Resume Builder"></div>
+                </div>
+            </div>
+            <div class="col-lg-5 ps-lg-5">
+                <h2 class="section-title mb-4">We Help You Build Career-Winning Resumes</h2>
+                <p>Our platform provides everything you need to create a professional resume that gets results. From modern templates to expert guidance, we're here to help you succeed in your job search.</p>
+
+                <ul class="list-unstyled custom-list my-4">
+                    <li>Professional templates designed by HR experts</li>
+                    <li>ATS-friendly formats that pass screening systems</li>
+                    <li>Real-time suggestions and career tips</li>
+                    <li>Secure cloud storage for all your resumes</li>
+                </ul>
+                <p><a href="{% if user.is_authenticated %}{% url 'create_resume' %}{% else %}{% url 'signup' %}{% endif %}" class="btn">Start Building</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End We Help Section -->
+
+<!-- Start Popular Product -->
+<div class="popular-product">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                <div class="product-item-sm text-center">
+                    <div class="pt-3">
+                        <h3>Modern Resume</h3>
+                        <p>Clean, contemporary design perfect for tech, creative, and modern industries.</p>
+                        <p><a href="{% if user.is_authenticated %}{% url 'create_resume' %}{% else %}{% url 'signup' %}{% endif %}">Use Template</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                <div class="product-item-sm text-center">
+                    <div class="pt-3">
+                        <h3>Professional CV</h3>
+                        <p>Traditional format ideal for corporate, finance, and executive positions.</p>
+                        <p><a href="{% if user.is_authenticated %}{% url 'create_resume' %}{% else %}{% url 'signup' %}{% endif %}">Use Template</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                <div class="product-item-sm text-center">
+                    <div class="pt-3">
+                        <h3>Creative Resume</h3>
+                        <p>Eye-catching design for creative professionals, designers, and marketers.</p>
+                        <p><a href="{% if user.is_authenticated %}{% url 'create_resume' %}{% else %}{% url 'signup' %}{% endif %}">Use Template</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Popular Product -->
+
+<!-- Start Testimonial Slider -->
+<div class="testimonial-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 mx-auto text-center">
+                <h2 class="section-title">Success Stories</h2>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="testimonial-slider-wrap text-center">
+                    <div id="testimonial-nav">
+                        <span class="prev" data-controls="prev"><span class="fa fa-chevron-left"></span></span>
+                        <span class="next" data-controls="next"><span class="fa fa-chevron-right"></span></span>
+                    </div>
+
+                    <div class="testimonial-slider">
+                        <div class="item">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 mx-auto">
+                                    <div class="testimonial-block text-center">
+                                        <blockquote class="mb-5">
+                                            <p>&ldquo;This resume builder helped me land my dream job at a Fortune 500 company. The templates are professional and the process was so easy. I got 3 interview calls within a week of applying!&rdquo;</p>
+                                        </blockquote>
+                                        <div class="author-info">
+                                            <div class="author-pic">
+                                                <img src="{% static 'images/person-1.png' %}" alt="Sarah Johnson" class="img-fluid">
+                                            </div>
+                                            <h3 class="font-weight-bold">Sarah Johnson</h3>
+                                            <span class="position d-block mb-3">Software Engineer, Google</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 mx-auto">
+                                    <div class="testimonial-block text-center">
+                                        <blockquote class="mb-5">
+                                            <p>&ldquo;As a recent graduate, I was struggling to create a professional resume. This platform made it incredibly easy and I received multiple job offers. The ATS optimization really works!&rdquo;</p>
+                                        </blockquote>
+                                        <div class="author-info">
+                                            <div class="author-pic">
+                                                <img src="{% static 'images/person-1.png' %}" alt="Michael Chen" class="img-fluid">
+                                            </div>
+                                            <h3 class="font-weight-bold">Michael Chen</h3>
+                                            <span class="position d-block mb-3">Marketing Manager, Microsoft</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 mx-auto">
+                                    <div class="testimonial-block text-center">
+                                        <blockquote class="mb-5">
+                                            <p>&ldquo;I've been using this resume builder for years to update my CV. The templates are always current with industry standards and the interface is user-friendly. Highly recommended!&rdquo;</p>
+                                        </blockquote>
+                                        <div class="author-info">
+                                            <div class="author-pic">
+                                                <img src="{% static 'images/person-1.png' %}" alt="Emily Rodriguez" class="img-fluid">
+                                            </div>
+                                            <h3 class="font-weight-bold">Emily Rodriguez</h3>
+                                            <span class="position d-block mb-3">Senior Consultant, Deloitte</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Testimonial Slider -->
+
+<!-- Start Blog Section -->
+<div class="blog-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <h2 class="section-title">Career Tips & Guides</h2>
+            </div>
+            <div class="col-md-6 text-start text-md-end">
+                <a href="#" class="more">View All Articles</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
+                <div class="post-entry">
+                    <a href="#" class="post-thumbnail"><img src="{% static 'images/post-1.jpg' %}" alt="Image" class="img-fluid"></a>
+                    <div class="post-content-entry">
+                        <h3><a href="#">How to Write a Winning Resume</a></h3>
+                        <div class="meta">
+                            <span>by <a href="#">Career Expert</a></span> <span>on <a href="#">Dec 19, 2024</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
+                <div class="post-entry">
+                    <a href="#" class="post-thumbnail"><img src="{% static 'images/post-2.jpg' %}" alt="Image" class="img-fluid"></a>
+                    <div class="post-content-entry">
+                        <h3><a href="#">Top Interview Tips for 2024</a></h3>
+                        <div class="meta">
+                            <span>by <a href="#">HR Specialist</a></span> <span>on <a href="#">Dec 15, 2024</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
+                <div class="post-entry">
+                    <a href="#" class="post-thumbnail"><img src="{% static 'images/post-3.jpg' %}" alt="Image" class="img-fluid"></a>
+                    <div class="post-content-entry">
+                        <h3><a href="#">ATS Optimization Secrets</a></h3>
+                        <div class="meta">
+                            <span>by <a href="#">Resume Expert</a></span> <span>on <a href="#">Dec 12, 2024</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Blog Section -->
+{% endblock %}
