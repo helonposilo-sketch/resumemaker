@@ -519,3 +519,160 @@ def api_add_reference(request, resume_id):
         return JsonResponse({'success': True, 'id': reference.id})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+@login_required
+def generate_pdf(request, resume_id):
+    """Generate professional PDF from resume using WeasyPrint"""
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+
+    # Get all resume data
+    education_list = resume.education.all()
+    experience_list = resume.experience.all()
+    skills_list = resume.skills.all()
+    projects_list = resume.projects.all()
+    certifications_list = resume.certifications.all()
+    languages_list = resume.languages.all()
+    references_list = resume.references.all()
+
+    # Render HTML template with print styles
+    html_string = render_to_string('resumes/print_pdf.html', {
+        'resume': resume,
+        'education_list': education_list,
+        'experience_list': experience_list,
+        'skills_list': skills_list,
+        'projects_list': projects_list,
+        'certifications_list': certifications_list,
+        'languages_list': languages_list,
+        'references_list': references_list,
+        'primary_color': resume.primary_color,
+        'secondary_color': resume.secondary_color,
+        'font_family': resume.font_family,
+        'font_size': resume.font_size,
+        'line_spacing': resume.line_spacing,
+    })
+
+    # Custom CSS for print
+    css_string = f"""
+        @page {{
+            size: A4;
+            margin: 20mm;
+            @bottom-right {{
+                content: "Page " counter(page);
+                font-size: 10px;
+                color: #666;
+            }}
+        }}
+
+        body {{
+            font-family: {resume.font_family}, sans-serif;
+            font-size: {resume.font_size}pt;
+            line-height: {resume.line_spacing};
+            color: #333;
+        }}
+
+        .resume-header {{
+            border-bottom: 2px solid {resume.primary_color};
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }}
+
+        .resume-name {{
+            font-size: 28px;
+            font-weight: bold;
+            color: #111;
+            margin-bottom: 8px;
+        }}
+
+        .resume-contact {{
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 5px;
+        }}
+
+        .resume-section-title {{
+            color: {resume.primary_color};
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid {resume.primary_color};
+            padding-bottom: 5px;
+        }}
+
+        .resume-item {{
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+        }}
+
+        .item-header {{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }}
+
+        .item-title {{
+            font-weight: bold;
+            font-size: 14px;
+            color: #111;
+        }}
+
+        .item-subtitle {{
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+        }}
+
+        .item-date {{
+            font-size: 11px;
+            color: #888;
+            white-space: nowrap;
+        }}
+
+        .item-description {{
+            font-size: 12px;
+            line-height: 1.4;
+            margin: 5px 0;
+        }}
+
+        .skills-grid {{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }}
+
+        .skill-badge {{
+            background: {resume.primary_color}20;
+            color: {resume.primary_color};
+            border: 1px solid {resume.primary_color}40;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }}
+
+        a {{
+            color: {resume.primary_color};
+            text-decoration: none;
+        }}
+    """
+
+    try:
+        # Generate PDF
+        html = HTML(string=html_string)
+        css = CSS(string=css_string)
+        pdf = html.write_pdf(stylesheets=[css])
+
+        # Create response
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = f"{resume.full_name.replace(' ', '_')}_resume.pdf"
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        response['Content-Length'] = len(pdf)
+
+        return response
+
+    except Exception as e:
+        messages.error(request, f'Error generating PDF: {str(e)}')
+        return redirect('builder_flowcv', resume_id=resume.id)
