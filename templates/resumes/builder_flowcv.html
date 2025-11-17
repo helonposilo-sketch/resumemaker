@@ -648,9 +648,41 @@
     <div class="preview-panel">
         <div class="preview-toolbar">
             <div class="toolbar-actions">
-                <button class="btn-toolbar" onclick="toggleTemplate()">
-                    <i class="fas fa-paint-brush"></i> Template
-                </button>
+                <div class="dropdown">
+                    <button class="btn-toolbar" onclick="toggleTemplateDropdown()">
+                        <i class="fas fa-paint-brush"></i> Template
+                        <i class="fas fa-chevron-down" style="margin-left: 6px; font-size: 12px;"></i>
+                    </button>
+                    <div class="dropdown-menu" id="templateDropdown" style="display: none;">
+                        <button class="dropdown-item" data-template="colored" onclick="switchTemplate('colored')">
+                            <i class="fas fa-circle" style="color: #667eea;"></i> Colored
+                        </button>
+                        <button class="dropdown-item" data-template="modern" onclick="switchTemplate('modern')">
+                            <i class="fas fa-circle" style="color: #2563eb;"></i> Modern
+                        </button>
+                        <button class="dropdown-item" data-template="professional" onclick="switchTemplate('professional')">
+                            <i class="fas fa-circle" style="color: #374151;"></i> Professional
+                        </button>
+                        <button class="dropdown-item" data-template="executive" onclick="switchTemplate('executive')">
+                            <i class="fas fa-circle" style="color: #1f2937;"></i> Executive
+                        </button>
+                        <button class="dropdown-item" data-template="minimalist" onclick="switchTemplate('minimalist')">
+                            <i class="fas fa-circle" style="color: #6b7280;"></i> Minimalist
+                        </button>
+                        <button class="dropdown-item" data-template="creative" onclick="switchTemplate('creative')">
+                            <i class="fas fa-circle" style="color: #ec4899;"></i> Creative
+                        </button>
+                        <button class="dropdown-item" data-template="technical" onclick="switchTemplate('technical')">
+                            <i class="fas fa-circle" style="color: #059669;"></i> Technical
+                        </button>
+                        <button class="dropdown-item" data-template="academic" onclick="switchTemplate('academic')">
+                            <i class="fas fa-circle" style="color: #7c3aed;"></i> Academic
+                        </button>
+                        <button class="dropdown-item" data-template="corporate" onclick="switchTemplate('corporate')">
+                            <i class="fas fa-circle" style="color: #0c4a6e;"></i> Corporate
+                        </button>
+                    </div>
+                </div>
                 <button class="btn-toolbar" onclick="customizeColors()">
                     <i class="fas fa-palette"></i> Customize
                 </button>
