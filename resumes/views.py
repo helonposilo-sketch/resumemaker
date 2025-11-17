@@ -4,9 +4,14 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.template.loader import render_to_string
 import json
+from weasyprint import HTML, CSS
+from weasyprint.text.fonts import FontConfiguration
+import tempfile
+import os
 from .models import Resume, Education, Experience, Skill, Project, Certification, Language, Reference, CustomSection
-from .forms import (ResumeForm, EducationForm, ExperienceForm, SkillForm, 
+from .forms import (ResumeForm, EducationForm, ExperienceForm, SkillForm,
                     ProjectForm, CertificationForm, LanguageForm, ReferenceForm, CustomSectionForm)
 
 def home(request):
