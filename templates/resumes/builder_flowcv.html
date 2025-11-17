@@ -1335,6 +1335,40 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('secondaryColor').addEventListener('input', function() {
         document.getElementById('secondaryHex').textContent = this.value;
     });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+        // Ctrl+S or Cmd+S for save
+        if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+            event.preventDefault();
+            saveResume();
+        }
+
+        // Ctrl+P or Cmd+P for PDF export
+        if ((event.ctrlKey || event.metaKey) && event.key === 'p') {
+            event.preventDefault();
+            downloadPDF();
+        }
+
+        // Escape to close modals
+        if (event.key === 'Escape') {
+            closeAllModals();
+        }
+
+        // Ctrl+Z for undo (placeholder)
+        if ((event.ctrlKey || event.metaKey) && event.key === 'z' && !event.shiftKey) {
+            event.preventDefault();
+            // TODO: Implement undo functionality
+            showSaveIndicator('Undo feature coming soon!', 'error');
+        }
+    });
+
+    // Form validation
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('blur', function() {
+            validateField(this);
+        });
+    });
 });
 
 function toggleSection(button) {
