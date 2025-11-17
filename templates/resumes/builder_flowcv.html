@@ -1010,13 +1010,46 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Real-time preview updates
     document.querySelectorAll('.form-control').forEach(input => {
         input.addEventListener('input', function() {
             updatePreview(this);
             autoSave();
         });
+    });
+
+    // Set active template in dropdown
+    const activeTemplateItem = document.querySelector(`[data-template="${CURRENT_TEMPLATE}"]`);
+    if (activeTemplateItem) {
+        activeTemplateItem.classList.add('active');
+    }
+
+    // Set current colors in modal
+    document.getElementById('primaryColor').value = CURRENT_PRIMARY_COLOR;
+    document.getElementById('secondaryColor').value = CURRENT_SECONDARY_COLOR;
+    document.getElementById('primaryHex').textContent = CURRENT_PRIMARY_COLOR;
+    document.getElementById('secondaryHex').textContent = CURRENT_SECONDARY_COLOR;
+
+    // Apply current colors to preview
+    updatePreviewColors(CURRENT_PRIMARY_COLOR, CURRENT_SECONDARY_COLOR);
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.style.display = 'none';
+            });
+        }
+    });
+
+    // Update color hex values when color inputs change
+    document.getElementById('primaryColor').addEventListener('input', function() {
+        document.getElementById('primaryHex').textContent = this.value;
+    });
+
+    document.getElementById('secondaryColor').addEventListener('input', function() {
+        document.getElementById('secondaryHex').textContent = this.value;
     });
 });
 
