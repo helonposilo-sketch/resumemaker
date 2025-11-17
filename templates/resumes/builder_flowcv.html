@@ -1371,25 +1371,379 @@ function toggleMobileEditor() {
     document.getElementById('editorPanel').classList.toggle('active');
 }
 
-// Placeholder functions for new sections
-function addProjectSection() {
-    alert('Project section feature coming soon!');
+// Advanced Section Functions
+function toggleSectionDisplay(sectionName) {
+    const section = document.getElementById(sectionName + 'Section');
+    if (section) {
+        section.style.display = 'block';
+        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Load existing data for this section
+        loadSectionData(sectionName);
+    }
 }
 
-function addCertificationSection() {
-    alert('Certification section feature coming soon!');
+function loadSectionData(sectionName) {
+    fetch(`/resumes/api/${sectionName}/${RESUME_ID}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                renderSectionData(sectionName, data.items);
+            }
+        })
+        .catch(error => {
+            console.error(`Error loading ${sectionName}:`, error);
+        });
 }
 
-function addLanguageSection() {
-    alert('Language section feature coming soon!');
+function renderSectionData(sectionName, items) {
+    const listElement = document.getElementById(sectionName + 'List');
+    if (!listElement) return;
+
+    listElement.innerHTML = '';
+
+    items.forEach(item => {
+        const itemElement = createSectionItem(sectionName, item);
+        listElement.appendChild(itemElement);
+    });
+
+    // Update preview
+    updateSectionPreview(sectionName, items);
 }
 
-function addReferenceSection() {
-    alert('Reference section feature coming soon!');
+function createSectionItem(sectionName, item) {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+        <div class="item-info">
+            <div class="item-info-title">${item.title || item.name || item.certification_name}</div>
+            <div class="item-info-subtitle">${getSubtitle(sectionName, item)}</div>
+        </div>
+        <div class="section-actions">
+            <button class="btn-icon" onclick="edit${sectionName.charAt(0).toUpperCase() + sectionName.slice(1, -1)}(${item.id})">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-icon" onclick="delete${sectionName.charAt(0).toUpperCase() + sectionName.slice(1, -1)}(${item.id})">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `;
+    return div;
+}
+
+function getSubtitle(sectionName, item) {
+    switch(sectionName) {
+        case 'projects':
+            return item.technologies ? `Technologies: ${item.technologies}` : '';
+        case 'certifications':
+            return `${item.issuing_organization} • ${item.issue_date}`;
+        case 'languages':
+            return item.proficiency;
+        case 'references':
+            return `${item.position} at ${item.company}`;
+        default:
+            return '';
+    }
+}
+
+function showProjectForm() {
+    document.getElementById('projectForm').style.display = 'block';
+    document.getElementById('projectTitle').focus();
+}
+
+function hideProjectForm() {
+    document.getElementById('projectForm').style.display = 'none';
+    clearProjectForm();
+}
+
+function clearProjectForm() {
+    document.getElementById('projectTitle').value = '';
+    document.getElementById('projectDescription').value = '';
+    document.getElementById('projectTechnologies').value = '';
+    document.getElementById('projectUrl').value = '';
+    document.getElementById('projectStartDate').value = '';
+    document.getElementById('projectEndDate').value = '';
+}
+
+function saveProject() {
+    const data = {
+        title: document.getElementById('projectTitle').value,
+        description: document.getElementById('projectDescription').value,
+        technologies: document.getElementById('projectTechnologies').value,
+        url: document.getElementById('projectUrl').value,
+        start_date: document.getElementById('projectStartDate').value,
+        end_date: document.getElementById('projectEndDate').value
+    };
+
+    fetch(`/resumes/api/projects/add/${RESUME_ID}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            hideProjectForm();
+            loadSectionData('projects');
+            showSaveIndicator('Project added');
+        } else {
+            showSaveIndicator('Error adding project', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showSaveIndicator('Error adding project', 'error');
+    });
+}
+
+function showCertificationForm() {
+    document.getElementById('certificationForm').style.display = 'block';
+    document.getElementById('certName').focus();
+}
+
+function hideCertificationForm() {
+    document.getElementById('certificationForm').style.display = 'none';
+    clearCertificationForm();
+}
+
+function clearCertificationForm() {
+    document.getElementById('certName').value = '';
+    document.getElementById('certOrganization').value = '';
+    document.getElementById('certIssueDate').value = '';
+    document.getElementById('certExpirationDate').value = '';
+    document.getElementById('certCredentialId').value = '';
+    document.getElementById('certCredentialUrl').value = '';
+}
+
+function saveCertification() {
+    const data = {
+        certification_name: document.getElementById('certName').value,
+        issuing_organization: document.getElementById('certOrganization').value,
+        issue_date: document.getElementById('certIssueDate').value,
+        expiration_date: document.getElementById('certExpirationDate').value,
+        credential_id: document.getElementById('certCredentialId').value,
+        credential_url: document.getElementById('certCredentialUrl').value
+    };
+
+    fetch(`/resumes/api/certifications/add/${RESUME_ID}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            hideCertificationForm();
+            loadSectionData('certifications');
+            showSaveIndicator('Certification added');
+        } else {
+            showSaveIndicator('Error adding certification', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showSaveIndicator('Error adding certification', 'error');
+    });
+}
+
+function showLanguageForm() {
+    document.getElementById('languageForm').style.display = 'block';
+    document.getElementById('languageName').focus();
+}
+
+function hideLanguageForm() {
+    document.getElementById('languageForm').style.display = 'none';
+    clearLanguageForm();
+}
+
+function clearLanguageForm() {
+    document.getElementById('languageName').value = '';
+    document.getElementById('languageProficiency').value = 'Elementary';
+}
+
+function saveLanguage() {
+    const data = {
+        name: document.getElementById('languageName').value,
+        proficiency: document.getElementById('languageProficiency').value
+    };
+
+    fetch(`/resumes/api/languages/add/${RESUME_ID}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            hideLanguageForm();
+            loadSectionData('languages');
+            showSaveIndicator('Language added');
+        } else {
+            showSaveIndicator('Error adding language', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showSaveIndicator('Error adding language', 'error');
+    });
+}
+
+function showReferenceForm() {
+    document.getElementById('referenceForm').style.display = 'block';
+    document.getElementById('referenceName').focus();
+}
+
+function hideReferenceForm() {
+    document.getElementById('referenceForm').style.display = 'none';
+    clearReferenceForm();
+}
+
+function clearReferenceForm() {
+    document.getElementById('referenceName').value = '';
+    document.getElementById('referencePosition').value = '';
+    document.getElementById('referenceCompany').value = '';
+    document.getElementById('referenceRelationship').value = '';
+    document.getElementById('referenceEmail').value = '';
+    document.getElementById('referencePhone').value = '';
+}
+
+function saveReference() {
+    const data = {
+        name: document.getElementById('referenceName').value,
+        position: document.getElementById('referencePosition').value,
+        company: document.getElementById('referenceCompany').value,
+        relationship: document.getElementById('referenceRelationship').value,
+        email: document.getElementById('referenceEmail').value,
+        phone: document.getElementById('referencePhone').value
+    };
+
+    fetch(`/resumes/api/references/add/${RESUME_ID}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            hideReferenceForm();
+            loadSectionData('references');
+            showSaveIndicator('Reference added');
+        } else {
+            showSaveIndicator('Error adding reference', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showSaveIndicator('Error adding reference', 'error');
+    });
+}
+
+function updateSectionPreview(sectionName, items) {
+    const previewContainer = document.getElementById('preview-' + sectionName);
+    if (!previewContainer) return;
+
+    if (items.length === 0) {
+        previewContainer.parentElement.style.display = 'none';
+        return;
+    }
+
+    previewContainer.parentElement.style.display = 'block';
+
+    let html = '';
+    items.forEach(item => {
+        html += createPreviewItem(sectionName, item);
+    });
+
+    previewContainer.innerHTML = html;
+}
+
+function createPreviewItem(sectionName, item) {
+    switch(sectionName) {
+        case 'projects':
+            return `
+                <div class="resume-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${item.title}</div>
+                            <div class="item-subtitle">${item.technologies ? 'Technologies: ' + item.technologies : ''}</div>
+                        </div>
+                        <div class="item-date">${formatDateRange(item.start_date, item.end_date)}</div>
+                    </div>
+                    <div class="item-description">${item.description}</div>
+                    ${item.url ? `<div class="item-description"><a href="${item.url}" target="_blank" style="color: var(--primary-color);">View Project</a></div>` : ''}
+                </div>
+            `;
+        case 'certifications':
+            return `
+                <div class="resume-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${item.certification_name}</div>
+                            <div class="item-subtitle">${item.issuing_organization}</div>
+                        </div>
+                        <div class="item-date">${formatDate(item.issue_date)}</div>
+                    </div>
+                    ${item.credential_id ? `<div class="item-description">Credential ID: ${item.credential_id}</div>` : ''}
+                </div>
+            `;
+        case 'languages':
+            return `
+                <div class="item-card">
+                    <div class="item-info">
+                        <div class="item-info-title">${item.name}</div>
+                        <div class="item-info-subtitle">${item.proficiency}</div>
+                    </div>
+                </div>
+            `;
+        case 'references':
+            return `
+                <div class="resume-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${item.name}</div>
+                            <div class="item-subtitle">${item.position} at ${item.company}</div>
+                        </div>
+                    </div>
+                    <div class="item-description">
+                        <div>Email: ${item.email}</div>
+                        ${item.phone ? `<div>Phone: ${item.phone}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        default:
+            return '';
+    }
+}
+
+function formatDate(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+}
+
+function formatDateRange(startDate, endDate) {
+    const start = formatDate(startDate);
+    const end = endDate ? formatDate(endDate) : 'Present';
+    return `${start} - ${end}`;
 }
 
 function addCustomSection() {
-    alert('Custom section feature coming soon!');
+    const sectionName = prompt('Enter custom section name:');
+    if (sectionName) {
+        alert('Custom section feature coming in next update!');
+    }
 }
 
 function toggleTemplateDropdown() {
