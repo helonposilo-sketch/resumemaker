@@ -1439,7 +1439,20 @@ function addSkill() {
 }
 
 function downloadPDF() {
-    window.print();
+    // Show loading state
+    const btn = event.target.closest('button');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+    btn.disabled = true;
+
+    // Generate PDF
+    window.location.href = `/resumes/generate-pdf/${RESUME_ID}/`;
+
+    // Restore button after a delay
+    setTimeout(() => {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    }, 3000);
 }
 
 function saveResume() {
