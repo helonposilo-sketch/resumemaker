@@ -388,3 +388,129 @@ def clone_resume(request, resume_id):
     
     messages.success(request, 'Resume cloned successfully!')
     return redirect('builder_flowcv', resume_id=new_resume.id)
+
+
+# API Endpoints for Advanced Sections
+@login_required
+def api_projects(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+    projects = resume.projects.all().values()
+
+    return JsonResponse({
+        'success': True,
+        'items': list(projects)
+    })
+
+@login_required
+@require_http_methods(["POST"])
+def api_add_project(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+
+    try:
+        data = json.loads(request.body)
+
+        project = Project.objects.create(
+            resume=resume,
+            title=data.get('title', ''),
+            description=data.get('description', ''),
+            technologies=data.get('technologies', ''),
+            url=data.get('url', ''),
+            start_date=data.get('start_date') or None,
+            end_date=data.get('end_date') or None
+        )
+
+        return JsonResponse({'success': True, 'id': project.id})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+@login_required
+def api_certifications(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+    certifications = resume.certifications.all().values()
+
+    return JsonResponse({
+        'success': True,
+        'items': list(certifications)
+    })
+
+@login_required
+@require_http_methods(["POST"])
+def api_add_certification(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+
+    try:
+        data = json.loads(request.body)
+
+        certification = Certification.objects.create(
+            resume=resume,
+            certification_name=data.get('certification_name', ''),
+            issuing_organization=data.get('issuing_organization', ''),
+            issue_date=data.get('issue_date') or None,
+            expiration_date=data.get('expiration_date') or None,
+            credential_id=data.get('credential_id', ''),
+            credential_url=data.get('credential_url', '')
+        )
+
+        return JsonResponse({'success': True, 'id': certification.id})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+@login_required
+def api_languages(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+    languages = resume.languages.all().values()
+
+    return JsonResponse({
+        'success': True,
+        'items': list(languages)
+    })
+
+@login_required
+@require_http_methods(["POST"])
+def api_add_language(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+
+    try:
+        data = json.loads(request.body)
+
+        language = Language.objects.create(
+            resume=resume,
+            name=data.get('name', ''),
+            proficiency=data.get('proficiency', 'Elementary')
+        )
+
+        return JsonResponse({'success': True, 'id': language.id})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+@login_required
+def api_references(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+    references = resume.references.all().values()
+
+    return JsonResponse({
+        'success': True,
+        'items': list(references)
+    })
+
+@login_required
+@require_http_methods(["POST"])
+def api_add_reference(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+
+    try:
+        data = json.loads(request.body)
+
+        reference = Reference.objects.create(
+            resume=resume,
+            name=data.get('name', ''),
+            position=data.get('position', ''),
+            company=data.get('company', ''),
+            email=data.get('email', ''),
+            phone=data.get('phone', ''),
+            relationship=data.get('relationship', '')
+        )
+
+        return JsonResponse({'success': True, 'id': reference.id})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
