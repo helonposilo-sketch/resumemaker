@@ -1144,6 +1144,88 @@
                     </div>
                 </div>
                 {% endif %}
+
+                {% if projects_list %}
+                <div class="resume-section">
+                    <div class="resume-section-title">Projects</div>
+                    <div id="preview-projects">
+                        {% for project in projects_list %}
+                        <div class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <div class="item-title">{{ project.title }}</div>
+                                    <div class="item-subtitle">{{ project.technologies }}</div>
+                                </div>
+                                <div class="item-date">{{ project.start_date|date:"M Y" }} - {{ project.end_date|date:"M Y"|default:"Present" }}</div>
+                            </div>
+                            <div class="item-description">{{ project.description }}</div>
+                            {% if project.url %}
+                            <div class="item-description">
+                                <a href="{{ project.url }}" target="_blank" style="color: var(--primary-color);">View Project</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if certifications_list %}
+                <div class="resume-section">
+                    <div class="resume-section-title">Certifications</div>
+                    <div id="preview-certifications">
+                        {% for cert in certifications_list %}
+                        <div class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <div class="item-title">{{ cert.certification_name }}</div>
+                                    <div class="item-subtitle">{{ cert.issuing_organization }}</div>
+                                </div>
+                                <div class="item-date">{{ cert.issue_date|date:"M Y" }}</div>
+                            </div>
+                            {% if cert.credential_id %}
+                            <div class="item-description">Credential ID: {{ cert.credential_id }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if languages_list %}
+                <div class="resume-section">
+                    <div class="resume-section-title">Languages</div>
+                    <div class="skills-grid" id="preview-languages">
+                        {% for language in languages_list %}
+                        <div class="skill-badge">{{ language.name }} ({{ language.proficiency }})</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if references_list %}
+                <div class="resume-section">
+                    <div class="resume-section-title">References</div>
+                    <div id="preview-references">
+                        {% for reference in references_list %}
+                        <div class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <div class="item-title">{{ reference.name }}</div>
+                                    <div class="item-subtitle">{{ reference.position }} at {{ reference.company }}</div>
+                                </div>
+                            </div>
+                            <div class="item-description">
+                                <div>Email: {{ reference.email }}</div>
+                                {% if reference.phone %}
+                                <div>Phone: {{ reference.phone }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
