@@ -993,6 +993,9 @@
 <script>
 let autoSaveTimeout;
 const RESUME_ID = {{ resume.id|default:0 }};
+const CURRENT_TEMPLATE = '{{ resume.template|default:"colored" }}';
+const CURRENT_PRIMARY_COLOR = '{{ resume.primary_color|default:"#667eea" }}';
+const CURRENT_SECONDARY_COLOR = '{{ resume.secondary_color|default:"#764ba2" }}';
 
 // Initialize Sortable for sections
 document.addEventListener('DOMContentLoaded', function() {
