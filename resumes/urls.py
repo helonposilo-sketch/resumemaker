@@ -23,4 +23,12 @@ urlpatterns = [
     
     # API endpoints
     path('api/save/<int:resume_id>/', views.api_save_resume, name='api_save_resume'),
+    path('api/projects/<int:resume_id>/', views.api_projects, name='api_projects'),
+    path('api/projects/add/<int:resume_id>/', views.api_add_project, name='api_add_project'),
+    path('api/certifications/<int:resume_id>/', views.api_certifications, name='api_certifications'),
+    path('api/certifications/add/<int:resume_id>/', views.api_add_certification, name='api_add_certification'),
+    path('api/languages/<int:resume_id>/', views.api_languages, name='api_languages'),
+    path('api/languages/add/<int:resume_id>/', views.api_add_language, name='api_add_language'),
+    path('api/references/<int:resume_id>/', views.api_references, name='api_references'),
+    path('api/references/add/<int:resume_id>/', views.api_add_reference, name='api_add_reference'),
 ]
