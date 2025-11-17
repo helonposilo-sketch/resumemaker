@@ -1190,12 +1190,169 @@ function addCustomSection() {
     alert('Custom section feature coming soon!');
 }
 
-function toggleTemplate() {
-    alert('Template selection feature coming soon!');
+function toggleTemplateDropdown() {
+    const dropdown = document.getElementById('templateDropdown');
+    const isVisible = dropdown.style.display !== 'none';
+    dropdown.style.display = isVisible ? 'none' : 'block';
+}
+
+function switchTemplate(newTemplate) {
+    // Close dropdown
+    document.getElementById('templateDropdown').style.display = 'none';
+
+    // Update active state
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    document.querySelector(`[data-template="${newTemplate}"]`).classList.add('active');
+
+    // Save template change
+    saveTemplateChange(newTemplate);
+
+    // Update preview with new template styles
+    updateTemplatePreview(newTemplate);
+}
+
+function saveTemplateChange(template) {
+    const data = { template: template };
+
+    fetch(`/resumes/api/save/${RESUME_ID}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSaveIndicator('Template updated');
+        } else {
+            showSaveIndicator('Error updating template', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showSaveIndicator('Error updating template', 'error');
+    });
+}
+
+function updateTemplatePreview(template) {
+    const preview = document.getElementById('resumePreview');
+
+    // Remove all template classes
+    preview.className = preview.className.replace(/template-\w+/g, '').trim();
+
+    // Add new template class
+    preview.classList.add(`template-${template}`);
+
+    // Apply template-specific styles
+    applyTemplateStyles(template);
+}
+
+function applyTemplateStyles(template) {
+    const root = document.documentElement;
+
+    // Template-specific color schemes
+    const templateColors = {
+        'colored': ['#667eea', '#764ba2'],
+        'modern': ['#2563eb', '#1d4ed8'],
+        'professional': ['#374151', '#4b5563'],
+        'executive': ['#1f2937', '#111827'],
+        'minimalist': ['#6b7280', '#9ca3af'],
+        'creative': ['#ec4899', '#db2777'],
+        'technical': ['#059669', '#047857'],
+        'academic': ['#7c3aed', '#6d28d9'],
+        'corporate': ['#0c4a6e', '#075985']
+    };
+
+    const colors = templateColors[template] || templateColors['colored'];
+    updatePreviewColors(colors[0], colors[1]);
+}
+
+function updatePreviewColors(primaryColor, secondaryColor) {
+    const preview = document.getElementById('resumePreview');
+    if (!preview) return;
+
+    preview.style.setProperty('--primary-color', primaryColor);
+    preview.style.setProperty('--secondary-color', secondaryColor);
+
+    // Update section headers
+    const sectionHeaders = preview.querySelectorAll('.resume-section-title');
+    sectionHeaders.forEach(header => {
+        header.style.color = primaryColor;
+    });
+
+    // Update resume header border
+    const resumeHeader = preview.querySelector('.resume-header');
+    if (resumeHeader) {
+        resumeHeader.style.borderBottomColor = primaryColor;
+    }
+
+    // Update skill badges with primary color
+    const skillBadges = preview.querySelectorAll('.skill-badge');
+    skillBadges.forEach(badge => {
+        badge.style.backgroundColor = primaryColor + '20';
+        badge.style.color = primaryColor;
+        badge.style.border = `1px solid ${primaryColor}40`;
+    });
 }
 
 function customizeColors() {
-    alert('Color customization feature coming soon!');
+    document.getElementById('colorModal').classList.add('active');
+}
+
+function closeColorModal() {
+    document.getElementById('colorModal').classList.remove('active');
+}
+
+function applyColors() {
+    const primaryColor = document.getElementById('primaryColor').value;
+    const secondaryColor = document.getElementById('secondaryColor').value;
+
+    // Update preview immediately
+    updatePreviewColors(primaryColor, secondaryColor);
+
+    // Save color changes
+    const data = {
+        primary_color: primaryColor,
+        secondary_color: secondaryColor
+    };
+
+    fetch(`/resumes/api/save/${RESUME_ID}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSaveIndicator('Colors updated');
+            closeColorModal();
+        } else {
+            showSaveIndicator('Error updating colors', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showSaveIndicator('Error updating colors', 'error');
+    });
+}
+
+function showSaveIndicator(message, type = 'success') {
+    const indicator = document.getElementById('autosaveStatus');
+    indicator.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i> ${message}`;
+    indicator.className = `autosave-indicator ${type === 'error' ? 'saving' : 'saved'}`;
+
+    // Reset after 3 seconds
+    setTimeout(() => {
+        indicator.innerHTML = '<i class="fas fa-check-circle"></i> All changes saved';
+        indicator.className = 'autosave-indicator saved';
+    }, 3000);
 }
 </script>
 {% endblock %}
