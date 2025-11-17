@@ -947,6 +947,41 @@
     </div>
 </div>
 
+<!-- Color Customization Modal -->
+<div class="modal" id="colorModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Customize Colors</div>
+            <div class="modal-subtitle">Choose colors that represent your personal brand</div>
+        </div>
+
+        <div class="color-picker-group">
+            <div class="color-picker-label">
+                Primary Color
+                <span class="color-hex" id="primaryHex">#667eea</span>
+            </div>
+            <div class="color-input-wrapper">
+                <input type="color" class="color-input" id="primaryColor" value="#667eea">
+            </div>
+        </div>
+
+        <div class="color-picker-group">
+            <div class="color-picker-label">
+                Secondary Color
+                <span class="color-hex" id="secondaryHex">#764ba2</span>
+            </div>
+            <div class="color-input-wrapper">
+                <input type="color" class="color-input" id="secondaryColor" value="#764ba2">
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeColorModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="applyColors()">Apply Colors</button>
+        </div>
+    </div>
+</div>
+
 <button class="mobile-toggle" onclick="toggleMobileEditor()">
     <i class="fas fa-bars"></i>
 </button>
