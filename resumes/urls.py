@@ -31,4 +31,5 @@ urlpatterns = [
     path('api/languages/add/<int:resume_id>/', views.api_add_language, name='api_add_language'),
     path('api/references/<int:resume_id>/', views.api_references, name='api_references'),
     path('api/references/add/<int:resume_id>/', views.api_add_reference, name='api_add_reference'),
+    path('generate-pdf/<int:resume_id>/', views.generate_pdf, name='generate_pdf'),
 ]
