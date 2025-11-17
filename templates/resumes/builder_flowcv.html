@@ -786,22 +786,224 @@
                 </div>
             </div>
             
+            <!-- Projects Section -->
+            <div class="section-card" data-section="projects" id="projectsSection" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-project-diagram"></i> Projects</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="section-items-list" id="projectsList">
+                        <!-- Projects will be populated here -->
+                    </div>
+                    <button class="add-item-btn" onclick="showProjectForm()">
+                        <i class="fas fa-plus"></i> Add Project
+                    </button>
+                    <div id="projectForm" style="display: none; margin-top: 16px; padding: 16px; background: #f9fafb; border-radius: 8px;">
+                        <div class="form-group">
+                            <label class="form-label">Project Name</label>
+                            <input type="text" class="form-control" id="projectTitle" placeholder="Project name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="projectDescription" rows="3" placeholder="Project description"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Technologies</label>
+                                <input type="text" class="form-control" id="projectTechnologies" placeholder="e.g., React, Django, PostgreSQL">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Project URL</label>
+                                <input type="url" class="form-control" id="projectUrl" placeholder="https://github.com/...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Start Date</label>
+                                <input type="month" class="form-control" id="projectStartDate">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">End Date</label>
+                                <input type="month" class="form-control" id="projectEndDate">
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button class="btn btn-primary" onclick="saveProject()">Save</button>
+                            <button class="btn btn-secondary" onclick="hideProjectForm()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certifications Section -->
+            <div class="section-card" data-section="certifications" id="certificationsSection" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-certificate"></i> Certifications</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="section-items-list" id="certificationsList">
+                        <!-- Certifications will be populated here -->
+                    </div>
+                    <button class="add-item-btn" onclick="showCertificationForm()">
+                        <i class="fas fa-plus"></i> Add Certification
+                    </button>
+                    <div id="certificationForm" style="display: none; margin-top: 16px; padding: 16px; background: #f9fafb; border-radius: 8px;">
+                        <div class="form-group">
+                            <label class="form-label">Certification Name</label>
+                            <input type="text" class="form-control" id="certName" placeholder="e.g., AWS Certified Developer">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Issuing Organization</label>
+                            <input type="text" class="form-control" id="certOrganization" placeholder="e.g., Amazon Web Services">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Issue Date</label>
+                                <input type="month" class="form-control" id="certIssueDate">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Expiration Date (Optional)</label>
+                                <input type="month" class="form-control" id="certExpirationDate">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Credential ID (Optional)</label>
+                                <input type="text" class="form-control" id="certCredentialId" placeholder="e.g., AWS-123456">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Credential URL (Optional)</label>
+                                <input type="url" class="form-control" id="certCredentialUrl" placeholder="https://...">
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button class="btn btn-primary" onclick="saveCertification()">Save</button>
+                            <button class="btn btn-secondary" onclick="hideCertificationForm()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Languages Section -->
+            <div class="section-card" data-section="languages" id="languagesSection" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-language"></i> Languages</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="section-items-list" id="languagesList">
+                        <!-- Languages will be populated here -->
+                    </div>
+                    <button class="add-item-btn" onclick="showLanguageForm()">
+                        <i class="fas fa-plus"></i> Add Language
+                    </button>
+                    <div id="languageForm" style="display: none; margin-top: 16px; padding: 16px; background: #f9fafb; border-radius: 8px;">
+                        <div class="form-group">
+                            <label class="form-label">Language Name</label>
+                            <input type="text" class="form-control" id="languageName" placeholder="e.g., Spanish">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Proficiency Level</label>
+                            <select class="form-control" id="languageProficiency">
+                                <option value="Elementary">Elementary</option>
+                                <option value="Limited Working">Limited Working</option>
+                                <option value="Professional Working">Professional Working</option>
+                                <option value="Full Professional">Full Professional</option>
+                                <option value="Native">Native/Bilingual</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button class="btn btn-primary" onclick="saveLanguage()">Save</button>
+                            <button class="btn btn-secondary" onclick="hideLanguageForm()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- References Section -->
+            <div class="section-card" data-section="references" id="referencesSection" style="display: none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-user-friends"></i> References</h3>
+                    <div class="section-actions">
+                        <button class="btn-icon" onclick="toggleSection(this)">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="section-items-list" id="referencesList">
+                        <!-- References will be populated here -->
+                    </div>
+                    <button class="add-item-btn" onclick="showReferenceForm()">
+                        <i class="fas fa-plus"></i> Add Reference
+                    </button>
+                    <div id="referenceForm" style="display: none; margin-top: 16px; padding: 16px; background: #f9fafb; border-radius: 8px;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Reference Name</label>
+                                <input type="text" class="form-control" id="referenceName" placeholder="John Smith">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Position</label>
+                                <input type="text" class="form-control" id="referencePosition" placeholder="Engineering Manager">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Company</label>
+                            <input type="text" class="form-control" id="referenceCompany" placeholder="Tech Company Inc.">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Relationship</label>
+                            <input type="text" class="form-control" id="referenceRelationship" placeholder="Former Manager">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="referenceEmail" placeholder="john@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone (Optional)</label>
+                                <input type="tel" class="form-control" id="referencePhone" placeholder="+1 234 567 8900">
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button class="btn btn-primary" onclick="saveReference()">Save</button>
+                            <button class="btn btn-secondary" onclick="hideReferenceForm()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Add More Sections -->
             <div class="section-card" data-section="add-more">
                 <div class="section-header">
                     <h3><i class="fas fa-plus-circle"></i> Add More Sections</h3>
                 </div>
                 <div class="section-body">
-                    <button class="add-item-btn" onclick="addProjectSection()">
+                    <button class="add-item-btn" onclick="toggleSectionDisplay('projects')">
                         <i class="fas fa-project-diagram"></i> Projects
                     </button>
-                    <button class="add-item-btn" onclick="addCertificationSection()">
+                    <button class="add-item-btn" onclick="toggleSectionDisplay('certifications')">
                         <i class="fas fa-certificate"></i> Certifications
                     </button>
-                    <button class="add-item-btn" onclick="addLanguageSection()">
+                    <button class="add-item-btn" onclick="toggleSectionDisplay('languages')">
                         <i class="fas fa-language"></i> Languages
                     </button>
-                    <button class="add-item-btn" onclick="addReferenceSection()">
+                    <button class="add-item-btn" onclick="toggleSectionDisplay('references')">
                         <i class="fas fa-user-friends"></i> References
                     </button>
                     <button class="add-item-btn" onclick="addCustomSection()">
