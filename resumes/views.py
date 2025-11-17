@@ -235,7 +235,9 @@ def api_save_resume(request, resume_id):
             resume.font_size = data['font_size']
         if 'section_order' in data:
             resume.section_order = data['section_order']
-        
+        if 'template' in data:
+            resume.template = data['template']
+
         resume.save()
         
         return JsonResponse({'success': True, 'message': 'Resume saved successfully'})
